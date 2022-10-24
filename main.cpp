@@ -167,6 +167,11 @@ map<int, menu> decideMenu()
 void printMenu(map<int, menu> menumap)
 {
     map<int, menu>::iterator i;
+    cout << "╔═══════════════════════════════════════╗" << endl;
+    cout << "║                                       ║" << endl;
+    cout << "║              Our Menu 🤤              ║" << endl;
+    cout << "║                                       ║" << endl;
+    cout << "║═══════════════════════════════════════║" << endl;
     for (i = menumap.begin(); i != menumap.end(); i++)
     {
         if ((*i).first < 10)
@@ -180,6 +185,7 @@ void printMenu(map<int, menu> menumap)
             cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t║ ₹ " << (*i).second.cost << " ║";
         cout << "\n";
     }
+    cout << "╚═══════════════════════════════════════╝";
 }
 
 int main()
