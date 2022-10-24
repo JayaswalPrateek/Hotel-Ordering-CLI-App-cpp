@@ -1,7 +1,9 @@
 #include<iostream>
 #include <windows.h>
 #include <stdio.h>
+#include <conio.h>
 using namespace std;
+void setcolor(WORD color);
 int main (int argc, char *argv[])
 {
     //to make console full screen
@@ -29,7 +31,14 @@ SendMessage(GetConsoleWindow(),WM_SYSKEYDOWN,VK_RETURN,0x20000000);
         cout<<"WELCOME"<<endl;
          for(int i=0;i<columns;i++)
     cout<<"=";
-    cout<<"\n";
+    cout<<"\n\n";
+    setcolor(10);//uses function defined below
+    int c2 = c-23;//23 can be replaced by length of new string generated when actual day is specfied
+     for(int i=0;i<c2/2;i++)
+            cout<<" ";
+            cout<<"SPECIAL DISCOUNT TODAY!"<<endl;
+              cout<<"\n\n";
+
 
 
 
@@ -40,4 +49,9 @@ SendMessage(GetConsoleWindow(),WM_SYSKEYDOWN,VK_RETURN,0x20000000);
 
 
    return(0);
+}
+void setcolor(WORD color)
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),color);
+    return;
 }
