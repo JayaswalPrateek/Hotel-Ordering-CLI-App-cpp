@@ -110,6 +110,21 @@ struct bill
     int qty;     // Member of struct
 };
 
+int userInputHandler01()
+{
+    cout << "--> ";
+    string choice = lowerCaser(fetchVar());
+    if (choice == "yes")
+        return 1;
+    else if (choice == "no")
+        return 2;
+    else if (choice == "q")
+        quit();
+    else
+        cout << "Invalid Input!\n\n";
+    return 0;
+}
+
 map<int, menu> setMenuVeg() // src:https://stackoverflow.com/a/50146252
 {
     // src:https://www.geeksforgeeks.org/c-map-key-user-define-data-type/
@@ -137,22 +152,6 @@ map<int, menu> setMenuNonVeg()
     nonVegMenu[vegLen + 6] = {"nonveg", "Fish    Curry", 300};
     return nonVegMenu;
 }
-
-int userInputHandler01()
-{
-    cout << "~~> ";
-    string choice = lowerCaser(fetchVar());
-    if (choice == "yes")
-        return 1;
-    else if (choice == "no")
-        return 2;
-    else if (choice == "q")
-        quit();
-    else
-        cout << "Invalid Input!\n\n";
-    return 0;
-}
-
 map<int, menu> decideMenu()
 {
     while (true)
@@ -163,6 +162,23 @@ map<int, menu> decideMenu()
             return setMenuVeg();
         else if (choice == 2)
             return setMenuNonVeg();
+    }
+}
+void printMenu(map<int, menu> menumap)
+{
+    map<int, menu>::iterator i;
+    for (i = menumap.begin(); i != menumap.end(); i++)
+    {
+        if ((*i).first < 10)
+            if ((*i).second.name.length() < 11)
+                cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t\t║ ₹ " << (*i).second.cost << " ║";
+            else
+                cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t║ ₹ " << (*i).second.cost << " ║";
+        else if ((*i).second.name.length() < 11)
+            cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t\t║ ₹ " << (*i).second.cost << " ║";
+        else
+            cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t║ ₹ " << (*i).second.cost << " ║";
+        cout << "\n";
     }
 }
 
