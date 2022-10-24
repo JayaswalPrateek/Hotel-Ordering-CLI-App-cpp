@@ -184,5 +184,10 @@ void printMenu(map<int, menu> menumap)
 
 int main()
 {
+    clearScr();
+    greet();
+    map<int, menu> menumap = decideMenu();
+    clearScr();
+    printMenu(menumap);
     return 0;
 }
