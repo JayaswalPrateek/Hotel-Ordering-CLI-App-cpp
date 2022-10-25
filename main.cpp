@@ -30,7 +30,6 @@ void crash(string loc)
     cout << "The program encountered unexpected behaviour at " << loc;
     exit(404);
 }
-
 string fetchVar()
 {
     string str;
@@ -185,7 +184,136 @@ void printMenu(map<int, menu> menumap)
             cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t║ ₹ " << (*i).second.cost << " ║";
         cout << "\n";
     }
-    cout << "╚═══════════════════════════════════════╝";
+    cout << "╚═══════════════════════════════════════╝\n\n";
+}
+
+void wannabuy()
+{
+    while (true)
+    {
+        cout << "Do you want to order anything from the menu? Answer with 'yes' or 'no', Enter 'q' to quit" << endl;
+        int choice = userInputHandler01();
+        if (choice == 1)
+            break;
+        else if (choice == 2)
+            quit();
+    }
+}
+
+int userInputHandler02(int lim)
+{
+    cout << "--> ";
+    string choice = lowerCaser(fetchVar());
+    if (choice == "done")
+        return 1;
+    else if (choice == "q")
+        quit();
+    else
+    {
+        int num;
+        try
+        {
+            num = stoi(choice);
+        }
+        catch (...)
+        {
+            cout << "'" << choice << "' is an invalid input!" << endl;
+            return 0;
+        }
+        if (num < 0)
+        {
+            cout << choice << " is an inappropriate input!" << endl;
+            return 0;
+        }
+        if (num > lim)
+        {
+            cout << choice << " is out of range!" << endl;
+            return 0;
+        }
+        return num + 1234;
+    }
+}
+
+int userInputHandler03()
+{
+    string choice = fetchVar();
+    int num;
+    try
+    {
+        num = stoi(choice);
+    }
+    catch (...)
+    {
+        cout << "'" << choice << "' is an invalid input!" << endl;
+        return 0;
+    }
+    if (num < 0)
+    {
+        cout << choice << " is an inappropriate input!" << endl;
+        return 0;
+    }
+    return num + 1234;
+}
+
+map<int, bill> takeOrder(map<int, menu> menumap)
+{
+    map<int, bill> billmap;
+    cout << "Instructions :" << endl;
+    cout << " *\tEnter 'DISH NUMBER' to add the dish to the cart" << endl;
+    cout << " *\tEnter 'DONE' to checkout" << endl;
+    cout << " *\tPress 'q' to quit\n\n";
+    while (true)
+    {
+        int choice = userInputHandler02(menumap.size());
+        if (choice == 0)
+            continue;
+        if (choice == 1)
+            if (billmap.size() != 0)
+                return billmap;
+            else
+                cout << "No Dishes ordered, instead press 'q' to quit" << endl;
+        else
+        {
+            choice -= 1234;
+            int howMany;
+            while (true)
+            {
+                cout << "How many " << menumap.at(choice).name << " do you want?";
+                howMany = userInputHandler03();
+                if (howMany != 0)
+                {
+                    howMany -= 1234;
+                    break;
+                }
+            }
+            bool skipflag;
+            map<int, bill>::iterator i;
+            for (i = billmap.begin(); i != billmap.end(); i++)
+            {
+                if ((*i).second.name == menumap.at(choice).name)
+                {
+                    if (howMany == 0)
+                    {
+                        cout << menumap.at(choice).name << " was not added to cart, alrady " << billmap.at(choice).qty << " in cart";
+                        skipflag = true;
+                        break;
+                    }
+                    (*i).second.qty += howMany;
+                    (*i).second.cost = (*i).second.qty * menumap.at(choice).cost;
+                    cout << "Added " << howMany << " " << menumap.at(choice).name << " in cart, now " << (*i).second.qty << " in cart" << endl;
+                    skipflag = true;
+                    break;
+                }
+            }
+            if (!skipflag && howMany != 0)
+            {
+                billmap.at(billmap.size() + 1) = {menumap.at(choice).type, menumap.at(choice).name, (menumap.at(choice).cost * howMany), howMany};
+                cout << "Added " << howMany << " " << menumap.at(choice).name << " to cart" << endl;
+            }
+            else if (!skipflag && howMany == 0)
+                cout << menumap.at(choice).name << " was not added to cart";
+        }
+    }
 }
 
 int main()
@@ -195,5 +323,9 @@ int main()
     map<int, menu> menumap = decideMenu();
     clearScr();
     printMenu(menumap);
+    wannabuy();
+    clearScr();
+    printMenu(menumap);
+    takeOrder(menumap);
     return 0;
 }
