@@ -1,4 +1,3 @@
-// todo: userinputhandler03 needs error handling support
 #include <iostream>
 #include <string>
 #include <ctime>
