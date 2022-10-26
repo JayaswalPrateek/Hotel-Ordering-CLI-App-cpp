@@ -1,3 +1,4 @@
+// fix padding of double digit qty and 4 digit costs, add totaling support to bill printer
 #include <iostream>
 #include <string>
 #include <ctime>
@@ -165,7 +166,6 @@ map<int, menu> setMenuNonVeg()
     nonVegMenu[vegLen + 3] = {"nonveg", "Chicken Pizza", 400};
     nonVegMenu[vegLen + 4] = {"nonveg", "Chicken Sandwich", 200};
     nonVegMenu[vegLen + 5] = {"nonveg", "Chicken Curry", 350};
-    nonVegMenu[vegLen + 6] = {"nonveg", "Fish    Curry", 300};
     return nonVegMenu;
 }
 map<int, menu> decideMenu()
@@ -323,6 +323,36 @@ map<int, bill> takeOrder(map<int, menu> menumap)
         }
     }
 }
+int printBill(map<int, bill> billmap)
+{
+    int total;
+    map<int, bill>::iterator i;
+    cout << "╔═══════════════════════════════════════════════╗" << endl;
+    cout << "║                                               ║" << endl;
+    cout << "║              🧂Your Bill🧾                    ║" << endl;
+    cout << "║                                               ║" << endl;
+    cout << "║═══════════════════════════════════════════════║" << endl;
+    for (i = billmap.begin(); i != billmap.end(); i++)
+    {
+        if ((*i).first < 10)
+            if ((*i).second.name.length() < 5)
+                cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t\t\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost << "   ║" << endl;
+            else if ((*i).second.name.length() >= 13)
+                cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost << "   ║" << endl;
+            else
+                cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost << "   ║" << endl;
+        else if ((*i).first >= 10)
+            if ((*i).second.name.length() < 5)
+                cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t\t\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost << "   ║" << endl;
+            else if ((*i).second.name.length() >= 13)
+                cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost << "   ║" << endl;
+            else
+                cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost << "   ║" << endl;
+        total += (*i).second.qty * (*i).second.cost;
+    }
+    cout << "╚═══════════════════════════════════════════════╝\n\n";
+    return total;
+}
 
 int main()
 {
@@ -334,6 +364,8 @@ int main()
     wannabuy();
     clearScr();
     printMenu(menumap);
-    takeOrder(menumap);
+    map<int, bill> billmap = takeOrder(menumap);
+    clearScr();
+    int total = printBill(billmap);
     return 0;
 }
