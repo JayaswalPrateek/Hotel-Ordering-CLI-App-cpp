@@ -1,4 +1,4 @@
-// fix padding of double digit qty and 4 digit costs, add totaling support to bill printer
+// fix padding of double digit qty and 4 digit costs
 #include <iostream>
 #include <string>
 #include <ctime>
@@ -336,21 +336,25 @@ int printBill(map<int, bill> billmap)
     {
         if ((*i).first < 10)
             if ((*i).second.name.length() < 5)
-                cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t\t\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost << "   ║" << endl;
+                cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t\t\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost * (*i).second.qty << "   ║" << endl;
             else if ((*i).second.name.length() >= 13)
-                cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost << "   ║" << endl;
+                cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost * (*i).second.qty << "   ║" << endl;
             else
-                cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost << "   ║" << endl;
+                cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost * (*i).second.qty << "   ║" << endl;
         else if ((*i).first >= 10)
             if ((*i).second.name.length() < 5)
-                cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t\t\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost << "   ║" << endl;
+                cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t\t\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost * (*i).second.qty << "   ║" << endl;
             else if ((*i).second.name.length() >= 13)
-                cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost << "   ║" << endl;
+                cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost * (*i).second.qty << "   ║" << endl;
             else
-                cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost << "   ║" << endl;
+                cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost * (*i).second.qty << "   ║" << endl;
         total += (*i).second.qty * (*i).second.cost;
     }
-    cout << "╚═══════════════════════════════════════════════╝\n\n";
+    cout << "╚═══════════════════════════════════════════════╝" << endl;
+    cout << "║                                               ║" << endl;
+    cout << "║      Total Cost: ₹" << total << endl;
+    cout << "║                                               ║" << endl;
+    cout << "╚═══════════════════════════════════════════════╝" << endl;
     return total;
 }
 
