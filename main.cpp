@@ -3,7 +3,7 @@
 #include <ctime>
 #include <map>
 using namespace std;
-// int main() is at the end(last function), so no need of multiple function prototypes
+// int main() is at the end(last function), so no need of multiple function prototypes.
 
 void clearScr()
 {
