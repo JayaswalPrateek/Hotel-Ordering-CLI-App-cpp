@@ -1,3 +1,4 @@
+// todo: userinputhandler03 needs error handling support
 #include <iostream>
 #include <string>
 #include <ctime>
@@ -51,6 +52,23 @@ string lowerCaser(string str)
     for (int i = 0; i < str.length(); i++)
         str[i] = tolower(str[i]);
     return str;
+}
+int stoic(string snum)
+{
+    int decctr = 1, num = 0;
+    for (int i = snum.length() - 1; i >= 0; i--)
+    {
+        if ((int)(snum.at(i)) >= 48 && (int)(snum.at(i)) <= 57)
+        {
+            int tar = (int)(snum.at(i));
+            int dig = tar - 48;
+            num += dig * decctr;
+            decctr *= 10;
+        }
+        else
+            return -9132;
+    }
+    return num;
 }
 string isItVeg(string checkDish)
 {
@@ -210,12 +228,8 @@ int userInputHandler02(int lim)
         quit();
     else
     {
-        int num;
-        try
-        {
-            num = stoi(choice);
-        }
-        catch (...)
+        int num = stoic(choice);
+        if (num == -9132)
         {
             cout << "'" << choice << "' is an invalid input!" << endl;
             return 0;
@@ -237,19 +251,15 @@ int userInputHandler02(int lim)
 int userInputHandler03()
 {
     string choice = fetchVar();
-    int num;
-    try
+    int num = stoic(choice);
+    if (num == -9132)
     {
-        num = stoi(choice);
-    }
-    catch (...)
-    {
-        cout << "'" << choice << "' is an invalid input!" << endl;
+        cout << num << " is an invalid input!" << endl;
         return 0;
     }
     if (num < 0)
     {
-        cout << choice << " is an inappropriate input!" << endl;
+        cout << num << " is an inappropriate input!" << endl;
         return 0;
     }
     return num + 1234;
@@ -275,18 +285,17 @@ map<int, bill> takeOrder(map<int, menu> menumap)
         else
         {
             choice -= 1234;
-            int howMany;
+            int howMany = 0;
             while (true)
             {
-                cout << "How many " << menumap.at(choice).name << " do you want?";
+                cout << "How many " << menumap.at(choice).name << " do you want? " << endl;
                 howMany = userInputHandler03();
-                if (howMany != 0)
-                {
-                    howMany -= 1234;
-                    break;
-                }
+                if (howMany == 0)
+                    continue;
+                howMany -= 1234;
+                break;
             }
-            bool skipflag;
+            bool skipflag = false;
             map<int, bill>::iterator i;
             for (i = billmap.begin(); i != billmap.end(); i++)
             {
@@ -307,7 +316,7 @@ map<int, bill> takeOrder(map<int, menu> menumap)
             }
             if (!skipflag && howMany != 0)
             {
-                billmap.at(billmap.size() + 1) = {menumap.at(choice).type, menumap.at(choice).name, (menumap.at(choice).cost * howMany), howMany};
+                billmap[billmap.size() + 1] = {menumap.at(choice).type, menumap.at(choice).name, (menumap.at(choice).cost * howMany), howMany};
                 cout << "Added " << howMany << " " << menumap.at(choice).name << " to cart" << endl;
             }
             else if (!skipflag && howMany == 0)
