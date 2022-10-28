@@ -1,11 +1,11 @@
-// fix padding of double digit qty and 4 digit costs
+// add commas to total
 #include <iostream>
 #include <string>
 #include <ctime>
 #include <map>
 using namespace std;
-// int main() is at the end(last function), so no need of multiple function prototypes.
 
+// #### SHORT & REUSABLE FUNCTIONS STARTED ####
 void clearScr()
 {
     // This is an ANSI Escape Code. It tells the console to flush the screen and reset the cursor. Works on Windows/Linux. src:https://stackoverflow.com/a/32008479
@@ -24,14 +24,14 @@ void quit()
     clearScr();
     cout << "Thanks for visiting us, do come back later 😚️";
     showCursor();
-    exit(0); // stop program with exit code = 0, ie. program stopped without crashes
+    exit(0); // stop program with exit code = 0, ie. program stopped without any crashes
 }
-void crash(string loc)
+void crash(string loc) // for debugging crashes and finding function which caused unexpected behaviour
 {
     cout << "The program encountered unexpected behaviour at " << loc;
     exit(404);
 }
-string fetchVar()
+string fetchVar() // standard function for normalizing inputs
 {
     string str;
     hideCursor();
@@ -47,45 +47,38 @@ string fetchVar()
     str[j] = '\0';
     return str;
 }
-string lowerCaser(string str)
+string lowerCaser(string str) // returns string in lower case
 {
     for (int i = 0; i < str.length(); i++)
         str[i] = tolower(str[i]);
     return str;
 }
-int stoic(string snum)
+int stoic(string snum) // converts string to int. Similar func available in STL, but needs try-catch. Pun intended(stoicism)
 {
-    int decctr = 1, num = 0;
+    int ctr = 1, num = 0;
     for (int i = snum.length() - 1; i >= 0; i--)
-    {
-        if ((int)(snum.at(i)) >= 48 && (int)(snum.at(i)) <= 57)
+        if ((int)(snum.at(i)) >= 48 && (int)(snum.at(i)) <= 57) // checks if char is a number
         {
-            int tar = (int)(snum.at(i));
-            int dig = tar - 48;
-            num += dig * decctr;
-            decctr *= 10;
+            int dig = (int)(snum.at(i)) - 48;
+            num += dig * ctr;
+            ctr *= 10;
         }
         else
-            return -9132;
-    }
+            return -2147483647; // returns magic number to signal error(largest value of an int)
     return num;
 }
 string isItVeg(string checkDish)
 {
-    int checker = checkDish == "veg" ? 1 : 0;
-    checker = checkDish == "nonveg" ? 2 : checker;
-    switch (checker)
-    {
-    case 1:
-        return "🟢️";
-    case 2:
-        return "🔴️";
-    default:
-        crash("isItVeg()");
-    }
+    if (checkDish == "veg")
+        return "🟢";
+    else if (checkDish == "nonveg")
+        return "🔴";
+    else
+        crash("isItVeg()"); // probably misplled veg/nonveg in "type" member of struct
 }
+// #### SHORT & REUSABLE FUNCTIONS OVER ####
 
-char *date() // returns current day of the week, depends on <ctime>. Returns address of the variable date which is an array of chars
+char *date() // returns current day of the week, depends on <ctime>. Returns pointer to variable date which is an array of chars which is a string
 {
     // creating variables using structs defined under <ctime>
     time_t curr_time;
@@ -112,22 +105,21 @@ void greet()
 }
 
 // struct is a set of properties for one dish and maps are a set of dishes with their own unique set of properties
-// src:https://www.w3schools.com/cpp/cpp_structs.asp
 struct menu
-{                // Structure declaration
-    string type; // Member of struct
-    string name; // Member of struct
-    int cost;    // Member of struct
+{
+    string type;
+    string name;
+    int cost;
 };
 struct bill
-{                // Structure declaration
-    string type; // Member of struct
-    string name; // Member of struct
-    int cost;    // Member of struct
-    int qty;     // Member of struct
+{
+    string type;
+    string name;
+    int cost;
+    int qty;
 };
 
-int userInputHandler01()
+int userInputHandler01() // yes/no/q
 {
     cout << "--> ";
     string choice = lowerCaser(fetchVar());
@@ -142,7 +134,8 @@ int userInputHandler01()
     return 0;
 }
 
-map<int, menu> setMenuVeg() // src:https://stackoverflow.com/a/50146252
+// creating 2 maps with int as key and struct menu as value
+map<int, menu> setMenuVeg()
 {
     // src:https://www.geeksforgeeks.org/c-map-key-user-define-data-type/
     map<int, menu> vegMenu;
@@ -154,13 +147,15 @@ map<int, menu> setMenuVeg() // src:https://stackoverflow.com/a/50146252
     vegMenu[6] = {"veg", "Noodles", 350};
     vegMenu[7] = {"veg", "Curry", 300};
     vegMenu[8] = {"veg", "Rice", 250};
-    return vegMenu;
+    // vegMenu[9] = {"veg", "<Name>", Cost};
+    return vegMenu; // src:https://stackoverflow.com/a/50146252
 }
 map<int, menu> setMenuNonVeg()
+
 {
-    map<int, menu> vegMenu = setMenuVeg();
-    int vegLen = vegMenu.size(); // src:https://www.tutorialspoint.com/map-size-in-cplusplus-stl
-    map<int, menu> nonVegMenu = setMenuVeg();
+    map<int, menu> nonVegMenu = setMenuVeg(); // inherit the veg menu
+    int vegLen = nonVegMenu.size();           // store the last key of veg menu src:https://www.tutorialspoint.com/map-size-in-cplusplus-stl
+    // append non veg dishes to vegmenu:
     nonVegMenu[vegLen + 1] = {"nonveg", "Chicken Burger", 300};
     nonVegMenu[vegLen + 2] = {"nonveg", "Chicken Wings", 200};
     nonVegMenu[vegLen + 3] = {"nonveg", "Chicken Pizza", 400};
@@ -172,7 +167,7 @@ map<int, menu> decideMenu()
 {
     while (true)
     {
-        cout << "Are you Vegan? Answer with 'yes' or 'no', 'q' to quit" << endl;
+        cout << "Are you Vegan? Answer with 'yes' / 'no', Press 'q' to quit" << endl;
         int choice = userInputHandler01();
         if (choice == 1)
             return setMenuVeg();
@@ -180,22 +175,22 @@ map<int, menu> decideMenu()
             return setMenuNonVeg();
     }
 }
-void printMenu(map<int, menu> menumap)
+void printMenu(map<int, menu> menumap) // CAUTION : very large dish name COULD break alignment :(
 {
     map<int, menu>::iterator i;
     cout << "╔═══════════════════════════════════════╗" << endl;
     cout << "║                                       ║" << endl;
-    cout << "║              Our Menu 🤤              ║" << endl;
+    cout << "║            🤤 Our Menu 🤤             ║" << endl;
     cout << "║                                       ║" << endl;
     cout << "║═══════════════════════════════════════║" << endl;
     for (i = menumap.begin(); i != menumap.end(); i++)
     {
-        if ((*i).first < 10)
-            if ((*i).second.name.length() < 11)
+        if ((*i).first < 10)                    // align dish number
+            if ((*i).second.name.length() < 11) // align dish name
                 cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t\t║ ₹ " << (*i).second.cost << " ║";
             else
                 cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t║ ₹ " << (*i).second.cost << " ║";
-        else if ((*i).second.name.length() < 11)
+        else if ((*i).second.name.length() < 11) // align dish number & dish name
             cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t\t║ ₹ " << (*i).second.cost << " ║";
         else
             cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t║ ₹ " << (*i).second.cost << " ║";
@@ -208,7 +203,7 @@ void wannabuy()
 {
     while (true)
     {
-        cout << "Do you want to order anything from the menu? Answer with 'yes' or 'no', Enter 'q' to quit" << endl;
+        cout << "Do you want to order anything from our menu? Answer with 'yes' / 'no', Press 'q' to quit" << endl;
         int choice = userInputHandler01();
         if (choice == 1)
             break;
@@ -217,7 +212,7 @@ void wannabuy()
     }
 }
 
-int userInputHandler02(int lim)
+int userInputHandler02(int lim) // done/q/<+ve int less than len of menumap>
 {
     cout << "--> ";
     string choice = lowerCaser(fetchVar());
@@ -228,40 +223,35 @@ int userInputHandler02(int lim)
     else
     {
         int num = stoic(choice);
-        if (num == -9132)
+        if (num == -2147483647 || num == 0)
         {
-            cout << "'" << choice << "' is an invalid input!" << endl;
-            return 0;
-        }
-        if (num < 0)
-        {
-            cout << choice << " is an inappropriate input!" << endl;
+            cout << "'" << choice << "' is an invalid input!\n\n";
             return 0;
         }
         if (num > lim)
         {
-            cout << choice << " is out of range!" << endl;
+            cout << choice << " is out of range!\n\n";
             return 0;
         }
-        return num + 1234;
+        return num + 1234; // adding 1234 coz item 1 might be interpreted as DONE
     }
 }
 
-int userInputHandler03()
+int userInputHandler03() //<int grtr than/equal to 0 and less than 100>
 {
     string choice = fetchVar();
     int num = stoic(choice);
-    if (num == -9132)
+    if (num == -2147483647)
     {
-        cout << num << " is an invalid input!" << endl;
+        cout << choice << " is an invalid input!\n\n";
         return 0;
     }
-    if (num < 0)
+    if (num > 99)
     {
-        cout << num << " is an inappropriate input!" << endl;
+        cout << "Maximum 99 dishes per person!\n\n";
         return 0;
     }
-    return num + 1234;
+    return num + 1234; // adding 1234 coz 0 might be misinterpreted
 }
 
 map<int, bill> takeOrder(map<int, menu> menumap)
@@ -277,49 +267,55 @@ map<int, bill> takeOrder(map<int, menu> menumap)
         if (choice == 0)
             continue;
         if (choice == 1)
-            if (billmap.size() != 0)
+            if (billmap.size() != 0) // dont checkout with empty cart
                 return billmap;
             else
-                cout << "No Dishes ordered, instead press 'q' to quit" << endl;
+                cout << "Cart is empty!, add something or press 'q' to quit\n\n";
         else
         {
-            choice -= 1234;
-            int howMany = 0;
+            choice -= 1234; // remove magic
+            int howMany;
             while (true)
             {
-                cout << "How many " << menumap.at(choice).name << " do you want? " << endl;
+                cout << "How many " << menumap.at(choice).name << " do you want? --> ";
                 howMany = userInputHandler03();
                 if (howMany == 0)
                     continue;
-                howMany -= 1234;
+                howMany -= 1234; // remove magic
                 break;
             }
             bool skipflag = false;
             map<int, bill>::iterator i;
             for (i = billmap.begin(); i != billmap.end(); i++)
             {
-                if ((*i).second.name == menumap.at(choice).name)
+                if ((*i).second.name == menumap.at(choice).name) // if item already in bill, dont create new entry
                 {
                     if (howMany == 0)
                     {
-                        cout << menumap.at(choice).name << " was not added to cart, alrady " << billmap.at(choice).qty << " in cart";
+                        cout << menumap.at(choice).name << " was not added to cart, alrady " << billmap.at(choice).qty << " in cart\n\n";
+                        skipflag = true;
+                        break;
+                    }
+                    if (howMany + (*i).second.qty > 99)
+                    {
+                        cout << "Maximum 99 dishes per person!\n\n";
                         skipflag = true;
                         break;
                     }
                     (*i).second.qty += howMany;
                     (*i).second.cost = (*i).second.qty * menumap.at(choice).cost;
-                    cout << "Added " << howMany << " " << menumap.at(choice).name << " in cart, now " << (*i).second.qty << " in cart" << endl;
+                    cout << "Added " << howMany << " " << menumap.at(choice).name << " in cart, now " << (*i).second.qty << " in cart\n\n";
                     skipflag = true;
                     break;
                 }
             }
-            if (!skipflag && howMany != 0)
+            if (!skipflag && howMany != 0) // create new entry if item not in bill already and howmany =/= 0
             {
                 billmap[billmap.size() + 1] = {menumap.at(choice).type, menumap.at(choice).name, (menumap.at(choice).cost * howMany), howMany};
-                cout << "Added " << howMany << " " << menumap.at(choice).name << " to cart" << endl;
+                cout << "Added " << howMany << " " << menumap.at(choice).name << " to cart\n\n";
             }
-            else if (!skipflag && howMany == 0)
-                cout << menumap.at(choice).name << " was not added to cart";
+            else if (!skipflag && howMany == 0) // dont create new entry if item not in bill already but howmany=0
+                cout << menumap.at(choice).name << " was not added to cart\n\n";
         }
     }
 }
@@ -327,34 +323,51 @@ int printBill(map<int, bill> billmap)
 {
     int total;
     map<int, bill>::iterator i;
-    cout << "╔═══════════════════════════════════════════════╗" << endl;
-    cout << "║                                               ║" << endl;
-    cout << "║              🧂Your Bill🧾                    ║" << endl;
-    cout << "║                                               ║" << endl;
-    cout << "║═══════════════════════════════════════════════║" << endl;
+    cout << "╔══════════════════════════════════════════════╗" << endl;
+    cout << "║                                              ║" << endl;
+    cout << "║                🧂 Your Bill 💰               ║" << endl;
+    cout << "║                                              ║" << endl;
+    cout << "║══════════════════════════════════════════════║" << endl;
+    string print, tab = "\t", sep = "║", ws = " ";
     for (i = billmap.begin(); i != billmap.end(); i++)
     {
+        // aligning dish numbers
         if ((*i).first < 10)
-            if ((*i).second.name.length() < 5)
-                cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t\t\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost * (*i).second.qty << "   ║" << endl;
-            else if ((*i).second.name.length() >= 13)
-                cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost * (*i).second.qty << "   ║" << endl;
-            else
-                cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost * (*i).second.qty << "   ║" << endl;
+            print = sep + ws + to_string((*i).first) + ws + ws + sep + ws + isItVeg((*i).second.type) + ws + (*i).second.name + tab;
         else if ((*i).first >= 10)
-            if ((*i).second.name.length() < 5)
-                cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t\t\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost * (*i).second.qty << "   ║" << endl;
-            else if ((*i).second.name.length() >= 13)
-                cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost * (*i).second.qty << "   ║" << endl;
-            else
-                cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << "\t\t ║ x" << (*i).second.qty << " ║ ₹ " << (*i).second.cost * (*i).second.qty << "   ║" << endl;
+            print = sep + ws + to_string((*i).first) + ws + sep + ws + isItVeg((*i).second.type) + ws + (*i).second.name + tab;
+
+        // aligning dish names
+        if ((*i).second.name.length() < 5)
+            print += tab + tab + ws + sep + ws + "x" + to_string((*i).second.qty);
+        else if ((*i).second.name.length() <= 13 && (*i).second.name.length() > 5)
+            print += tab + ws + sep + ws + "x" + to_string((*i).second.qty);
+        else if ((*i).second.name.length() > 13)
+            print += ws + sep + ws + "x" + to_string((*i).second.qty);
+        else
+            print += tab + tab + ws + sep + ws + "x" + to_string((*i).second.qty);
+
+        // aligning dish qty
+        if ((*i).second.qty < 10)
+            print += ws + ws + sep;
+        else if ((*i).second.qty < 100)
+            print += ws + sep;
+
+        // aligning dish qty * dish price
+        if ((*i).second.cost < 1000)
+            print += ws + to_string((*i).second.cost) + ws + ws + ws + sep;
+        else if ((*i).second.cost < 10000)
+            print += ws + to_string((*i).second.cost) + ws + ws + sep;
+        else if ((*i).second.cost < 100000)
+            print += ws + to_string((*i).second.cost) + ws + sep;
+
+        cout << print << endl;
         total += (*i).second.qty * (*i).second.cost;
     }
-    cout << "╚═══════════════════════════════════════════════╝" << endl;
-    cout << "║                                               ║" << endl;
-    cout << "║      Total Cost: ₹" << total << endl;
-    cout << "║                                               ║" << endl;
-    cout << "╚═══════════════════════════════════════════════╝" << endl;
+    cout << "║══════════════════════════════════════════════╝" << endl;
+    cout << "║ Total Cost: ₹ " << total << "/-" << endl;
+    cout << "╚═══════════════════════════════════════════════" << endl;
+
     return total;
 }
 
