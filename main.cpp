@@ -199,7 +199,7 @@ void printMenu(map<int, menu> menumap) // CAUTION : very large dish name COULD b
     cout << "╚═══════════════════════════════════════╝\n\n";
 }
 
-void wannabuy()
+void wannaBuy()
 {
     while (true)
     {
@@ -371,18 +371,148 @@ int printBill(map<int, bill> billmap)
     return total;
 }
 
+map<int, bill> letsDel(map<int, bill> billmap, int lim);
+map<int, bill> wannaDel(map<int, bill> billmap, int lim)
+{
+    while (true)
+    {
+        cout << "\nDo you want to remove anything from your bill? Answer with 'yes' / 'no', Press 'q' to quit" << endl;
+        int choice = userInputHandler01();
+        if (choice == 1)
+        {
+            billmap = letsDel(billmap, lim);
+            clearScr();
+            printBill(billmap);
+        }
+        else if (choice == 2)
+            return billmap;
+    }
+}
+int userInputHandler04(int lim)
+{
+    string choice = fetchVar();
+    int num = stoic(choice);
+    if (num == -2147483647 || num < 0)
+    {
+        cout << "'" << choice << "' is an invalid input!\n\n";
+        return 0;
+    }
+    if (num > lim)
+    {
+        cout << choice << " is out of range!\n\n";
+        return 0;
+    }
+    return num + 1234; // adding 1234 coz 0 might be misinterpreted
+}
+map<int, bill> letsDel(map<int, bill> billmap, int lim)
+{
+    clearScr();
+    printBill(billmap);
+    int history[lim], appendCtr = 0;
+    int billLen = billmap.size();
+    cout << "\nInstructions :" << endl;
+    cout << " *\tEnter 'DISH NUMBER' to remove the dish from the cart" << endl;
+    cout << " *\tEnter 'DONE' to save" << endl;
+    cout << " *\tPress 'q' to quit\n\n";
+    bool skipLoop = false;
+    while (true)
+    {
+        int choice = userInputHandler02(billLen);
+        if (choice == 0)
+            continue;
+        if (choice == 1)
+        {
+            if (billmap.size() != 0)
+                return billmap;
+            else
+            {
+                clearScr();
+                cout << "😭️ All Items Removed from cart 😭️" << endl;
+                cout << "Thanks for visiting us, do come back later 😚️";
+                showCursor();
+                exit(0);
+            }
+        }
+        else
+        {
+            choice -= 1234;
+            for (int i = 0; i < lim; i++)
+                if (history[i] == choice)
+                {
+                    cout << "dish " << choice << " was already removed from the bill, enter 'DONE' to save and print new bill\n\n";
+                    skipLoop = true;
+                    break;
+                }
+            if (skipLoop)
+                break;
+            if (billmap.at(choice).qty == 1)
+            {
+                cout << billmap.at(choice).name << " removed from cart\n\n";
+                history[appendCtr] = choice;
+                billmap.erase(choice);
+                appendCtr++;
+            }
+            else
+            {
+                while (true)
+                {
+                    cout << "There are " << billmap.at(choice).qty << "x " << billmap.at(choice).name << " in cart, how many to remove? --> ";
+                    int howMany = userInputHandler04(billmap.at(choice).qty);
+                    if (howMany == 0)
+                        continue;
+                    howMany -= 1234;
+                    if (howMany == 0)
+                        cout << "Qunatity of " << billmap.at(choice).name << " not modified\n\n";
+                    else if (howMany == billmap.at(choice).qty)
+                    {
+                        cout << billmap.at(choice).name << " removed from cart\n\n";
+                        history[appendCtr] = choice;
+                        billmap.erase(choice);
+                        appendCtr++;
+                    }
+                    else
+                    {
+                        billmap.at(choice).cost -= (billmap.at(choice).cost / billmap.at(choice).qty) * howMany;
+                        billmap.at(choice).qty -= howMany;
+                        cout << billmap.at(choice).qty << "x " << billmap.at(choice).name << " left in cart\n\n";
+                    }
+                    break;
+                }
+            }
+        }
+    }
+}
+
+void logOrder(string name, map<int, bill>, int total)
+{
+    // code to create order history by creating a file called <name>.txt with billmap and total in it.
+}
+
+void thankYou()
+{
+    cout << "\n\n\n\nThank YOU!";
+}
+
 int main()
 {
     clearScr();
     greet();
+    string name;
+    cout << "Enter Your Name: ";
+    cin >> name;
     map<int, menu> menumap = decideMenu();
     clearScr();
     printMenu(menumap);
-    wannabuy();
+    wannaBuy();
     clearScr();
     printMenu(menumap);
     map<int, bill> billmap = takeOrder(menumap);
     clearScr();
     int total = printBill(billmap);
+    billmap = wannaDel(billmap, menumap.size());
+    clearScr();
+    total = printBill(billmap);
+    logOrder(name, billmap, total);
+    thankYou();
     return 0;
 }
