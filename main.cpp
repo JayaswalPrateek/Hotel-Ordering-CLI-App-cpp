@@ -1,9 +1,10 @@
-// add commas to total
 #include <iostream>
 #include <string>
 #include <ctime>
 #include <map>
+#include "dep/rang.hpp"
 using namespace std;
+using namespace rang;
 
 // #### SHORT & REUSABLE FUNCTIONS STARTED ####
 void clearScr()
@@ -76,6 +77,32 @@ string isItVeg(string checkDish)
     else
         crash("isItVeg()"); // probably misplled veg/nonveg in "type" member of struct
 }
+string comma(string s)
+{
+    int l = s.length();
+    if (l <= 3)
+        return (s);
+    string s2 = "," + s.substr(l - 3, 3);
+    s = s.substr(0, l - 3);
+    int n = s.length();
+    if (l % 2 == 1)
+    {
+        while (n)
+        {
+            s2 = "," + s.substr(n - 2, 2) + s2;
+            s = s.substr(0, n - 2);
+            n = s.length();
+        }
+        return (s2.substr(1, s2.length()));
+    }
+    while (n > 1)
+    {
+        s2 = "," + s.substr(n - 2, 2) + s2;
+        s = s.substr(0, n - 2);
+        n = s.length();
+    }
+    return (s + s2);
+}
 // #### SHORT & REUSABLE FUNCTIONS OVER ####
 
 char *date() // returns current day of the week, depends on <ctime>. Returns pointer to variable date which is an array of chars which is a string
@@ -97,6 +124,18 @@ char *date() // returns current day of the week, depends on <ctime>. Returns poi
 }
 void greet()
 {
+    // cout << bg::green
+    //      << "This text has green background." << bg::reset << endl
+    //      << bg::red << "This text has red background." << bg::reset << endl
+    //      << bg::black << "This text has black background." << bg::reset << endl
+    //      << bg::yellow << "This text has yellow background." << bg::reset
+    //      << endl
+    //      << bg::blue << "This text has blue background." << bg::reset << endl
+    //      << bg::magenta << "This text has magenta background." << bg::reset
+    //      << endl
+    //      << bg::cyan << "This text has cyan background." << bg::reset << endl
+    //      << bg::gray << fg::black << "This text has gray background."
+    //      << bg::reset << style::reset << endl;
     cout << "WELCOME\n\n";
     char *today;
     today = date();
@@ -319,6 +358,7 @@ map<int, bill> takeOrder(map<int, menu> menumap)
         }
     }
 }
+
 int printBill(map<int, bill> billmap)
 {
     int total;
@@ -365,7 +405,7 @@ int printBill(map<int, bill> billmap)
         total += (*i).second.qty * (*i).second.cost;
     }
     cout << "║══════════════════════════════════════════════╝" << endl;
-    cout << "║ Total Cost: ₹ " << total << "/-" << endl;
+    cout << "║ Total Cost: ₹ " << comma(to_string(total)) << "/-" << endl;
     cout << "╚═══════════════════════════════════════════════" << endl;
 
     return total;
@@ -449,7 +489,7 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
             {
                 cout << billmap.at(choice).name << " removed from cart\n\n";
                 history[appendCtr] = choice;
-                billmap.erase(choice);
+                billmap.erase(choice); // src:https://www.geeksforgeeks.org/map-erase-function-in-c-stl/
                 appendCtr++;
             }
             else
@@ -467,7 +507,7 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
                     {
                         cout << billmap.at(choice).name << " removed from cart\n\n";
                         history[appendCtr] = choice;
-                        billmap.erase(choice);
+                        billmap.erase(choice); // src:https://www.geeksforgeeks.org/map-erase-function-in-c-stl/
                         appendCtr++;
                     }
                     else
@@ -483,9 +523,26 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
     }
 }
 
+void asktoPay(int amt)
+{
+    while (true)
+    {
+        cout << "Proceed to pay ₹" << amt << "? Confirm with 'yes' or 'no', Press 'q' to quit" << endl;
+        int choice = userInputHandler01();
+        if (choice == 1)
+            break;
+        else if (choice == 2)
+            quit();
+    }
+}
+
 void logOrder(string name, map<int, bill>, int total)
 {
     // code to create order history by creating a file called <name>.txt with billmap and total in it.
+}
+
+void transact()
+{
 }
 
 void thankYou()
@@ -512,6 +569,8 @@ int main()
     billmap = wannaDel(billmap, menumap.size());
     clearScr();
     total = printBill(billmap);
+    asktoPay(total);
+    transact();
     logOrder(name, billmap, total);
     thankYou();
     return 0;
