@@ -1,8 +1,14 @@
+// TODO:
+// -> add comments to comma function(@Vedant)
+// -> agree on formatting
+// -> letsdel has minor bugs, fix pending
+// -> make porgram usable on win64
+
 #include <iostream>
 #include <string>
-#include <ctime>
+#include <ctime> // to show current day of the week in greet()
 #include <map>
-#include "dep/rang.hpp"
+#include "dep/rang.hpp" // for text coloring and formatting
 using namespace std;
 using namespace rang;
 
@@ -23,16 +29,16 @@ void showCursor() // src:https://stackoverflow.com/a/55313602
 void quit()
 {
     clearScr();
-    cout << "Thanks for visiting us, do come back later 😚️";
+    cout << style::blink << "😚️ " << style::reset << style::bold << "Thanks for visiting us, do come back later" << style::reset << style::blink << " 😚️" << style::reset << endl;
     showCursor();
-    exit(0); // stop program with exit code = 0, ie. program stopped without any crashes
+    exit(0); // stop program with exit code = 0, i.e. program stopped without any crashes
 }
-void crash(string loc) // for debugging crashes and finding function which caused unexpected behaviour
+void crash(string loc) // for debugging crashes and locating the function which caused unexpected behaviour
 {
-    cout << "The program encountered unexpected behaviour at " << loc;
+    cout << rang::fg::red << style::reversed << "The program encountered unexpected behaviour at " << loc << style::reset << "\n\n";
     exit(404);
 }
-string fetchVar() // standard function for normalizing inputs
+string fetchVar() // function for normalizing all inputs
 {
     string str;
     hideCursor();
@@ -65,7 +71,7 @@ int stoic(string snum) // converts string to int. Similar func available in STL,
             ctr *= 10;
         }
         else
-            return -2147483647; // returns magic number to signal error(largest value of an int)
+            return -2147483647; // returns magic number to signal error -(largest value of an int - 1)
     return num;
 }
 string isItVeg(string checkDish)
@@ -75,9 +81,9 @@ string isItVeg(string checkDish)
     else if (checkDish == "nonveg")
         return "🔴";
     else
-        crash("isItVeg()"); // probably misplled veg/nonveg in "type" member of struct
+        crash("isItVeg(), probably mispelled word veg/nonveg for a 'type' member of struct menu");
 }
-string comma(string s)
+string comma(string s) // thanks @Vedant
 {
     int l = s.length();
     if (l <= 3)
@@ -105,44 +111,6 @@ string comma(string s)
 }
 // #### SHORT & REUSABLE FUNCTIONS OVER ####
 
-char *date() // returns current day of the week, depends on <ctime>. Returns pointer to variable date which is an array of chars which is a string
-{
-    // creating variables using structs defined under <ctime>
-    time_t curr_time;
-    tm *curr_tm;
-
-    // date is static, so that it can be returned. src:method 2 on https://www.geeksforgeeks.org/how-to-return-a-local-array-from-a-cpp-function/
-    static char date[100];
-
-    // stores current date+time at location of variable curr_tm
-    time(&curr_time);                // store time at curr_time
-    curr_tm = localtime(&curr_time); // localize the time and store it in curr_tm
-
-    // format curr_tm to show only day of the week and store it inside date
-    strftime(date, 50, "%A", curr_tm);
-    return date;
-}
-void greet()
-{
-    // cout << bg::green
-    //      << "This text has green background." << bg::reset << endl
-    //      << bg::red << "This text has red background." << bg::reset << endl
-    //      << bg::black << "This text has black background." << bg::reset << endl
-    //      << bg::yellow << "This text has yellow background." << bg::reset
-    //      << endl
-    //      << bg::blue << "This text has blue background." << bg::reset << endl
-    //      << bg::magenta << "This text has magenta background." << bg::reset
-    //      << endl
-    //      << bg::cyan << "This text has cyan background." << bg::reset << endl
-    //      << bg::gray << fg::black << "This text has gray background."
-    //      << bg::reset << style::reset << endl;
-    cout << "WELCOME\n\n";
-    char *today;
-    today = date();
-    cout << "🎊️ " << today << " Exclusive Offers! 🎊️\n\n";
-    cout << "Enjoy discounts on all dishes every " << today << "\n\n";
-}
-
 // struct is a set of properties for one dish and maps are a set of dishes with their own unique set of properties
 struct menu
 {
@@ -158,9 +126,42 @@ struct bill
     int qty;
 };
 
+char *date() // returns current day of the week, depends on <ctime>. Returns pointer to variable date which is an array of chars which is a string
+{
+    // creating variables using structs defined under <ctime>
+    time_t curr_time;
+    tm *curr_tm;
+
+    // date is static, so that it can be returned. src:method 2 on https://www.geeksforgeeks.org/how-to-return-a-local-array-from-a-cpp-function/
+    static char date[100];
+
+    // stores current date+time at location of variable curr_tm
+    time(&curr_time);                // store time at curr_time
+    curr_tm = localtime(&curr_time); // localize the time and store it in curr_tm
+
+    // format curr_tm to show only day of the week and store it inside variable date
+    strftime(date, 50, "%A", curr_tm);
+    return date;
+}
+void greet()
+{
+    cout << rang::fgB::cyan;
+    cout << "██╗    ██╗ ███████╗ ██╗       ██████╗  ██████╗  ███╗   ███╗ ███████╗    ██╗" << endl;
+    cout << "██║    ██║ ██╔════╝ ██║      ██╔════╝ ██╔═══██╗ ████╗ ████║ ██╔════╝    ██║" << endl;
+    cout << "██║ █╗ ██║ █████╗   ██║      ██║      ██║   ██║ ██╔████╔██║ █████╗      ██║" << endl;
+    cout << "██║███╗██║ ██╔══╝   ██║      ██║      ██║   ██║ ██║╚██╔╝██║ ██╔══╝      ╚═╝" << endl;
+    cout << "╚███╔███╔╝ ███████╗ ███████╗ ╚██████╗ ╚██████╔╝ ██║ ╚═╝ ██║ ███████╗    ██╗" << endl;
+    cout << " ╚══╝╚══╝  ╚══════╝ ╚══════╝  ╚═════╝  ╚═════╝  ╚═╝     ╚═╝ ╚══════╝    ╚═╝\n\n"
+         << style::reset;
+    char *today;
+    today = date();
+    cout << "\t\t\t🎊️ " << style::italic << rang::fgB::magenta << today << " Exclusive Offers! 🎊️\n\n";
+    cout << "\t\tEnjoy discounts on all dishes every " << today << "!" << style::reset << "\n\n";
+}
+
 int userInputHandler01() // yes/no/q
 {
-    cout << "--> ";
+    cout << style::bold << style::blink << "--> " << style::reset;
     string choice = lowerCaser(fetchVar());
     if (choice == "yes")
         return 1;
@@ -169,11 +170,13 @@ int userInputHandler01() // yes/no/q
     else if (choice == "q")
         quit();
     else
-        cout << "Invalid Input!\n\n";
+        cout << style::bold << rang::fgB::red << style::reversed << "Invalid Input!\n\n"
+             << style::reset;
     return 0;
 }
 
 // creating 2 maps with int as key and struct menu as value
+// later found out keys in c++ for maps are immutable :(
 map<int, menu> setMenuVeg()
 {
     // src:https://www.geeksforgeeks.org/c-map-key-user-define-data-type/
@@ -186,11 +189,10 @@ map<int, menu> setMenuVeg()
     vegMenu[6] = {"veg", "Noodles", 350};
     vegMenu[7] = {"veg", "Curry", 300};
     vegMenu[8] = {"veg", "Rice", 250};
-    // vegMenu[9] = {"veg", "<Name>", Cost};
+    // vegMenu[9] = {"veg", "<Name>", <Cost>};
     return vegMenu; // src:https://stackoverflow.com/a/50146252
 }
 map<int, menu> setMenuNonVeg()
-
 {
     map<int, menu> nonVegMenu = setMenuVeg(); // inherit the veg menu
     int vegLen = nonVegMenu.size();           // store the last key of veg menu src:https://www.tutorialspoint.com/map-size-in-cplusplus-stl
@@ -200,13 +202,13 @@ map<int, menu> setMenuNonVeg()
     nonVegMenu[vegLen + 3] = {"nonveg", "Chicken Pizza", 400};
     nonVegMenu[vegLen + 4] = {"nonveg", "Chicken Sandwich", 200};
     nonVegMenu[vegLen + 5] = {"nonveg", "Chicken Curry", 350};
-    return nonVegMenu;
+    return nonVegMenu; // src:https://stackoverflow.com/a/50146252
 }
-map<int, menu> decideMenu()
+map<int, menu> decideMenu(string name)
 {
     while (true)
     {
-        cout << "Are you Vegan? Answer with 'yes' / 'no', Press 'q' to quit" << endl;
+        cout << style::italic << style::reversed << " " << name << ", Are you Jain? Answer with 'yes' / 'no', Press 'q' to quit " << style::reset << endl;
         int choice = userInputHandler01();
         if (choice == 1)
             return setMenuVeg();
@@ -214,14 +216,14 @@ map<int, menu> decideMenu()
             return setMenuNonVeg();
     }
 }
-void printMenu(map<int, menu> menumap) // CAUTION : very large dish name COULD break alignment :(
+void printMenu(map<int, menu> menumap) // CAUTION : very large dish name COULD break alignment but wont crash() :(
 {
-    map<int, menu>::iterator i;
     cout << "╔═══════════════════════════════════════╗" << endl;
     cout << "║                                       ║" << endl;
-    cout << "║            🤤 Our Menu 🤤             ║" << endl;
+    cout << "║            " << style::blink << "🤤" << style::reset << style::bold << " Our Menu " << style::reset << style::blink << "🤤" << style::reset << "             ║" << endl;
     cout << "║                                       ║" << endl;
     cout << "║═══════════════════════════════════════║" << endl;
+    map<int, menu>::iterator i;
     for (i = menumap.begin(); i != menumap.end(); i++)
     {
         if ((*i).first < 10)                    // align dish number
@@ -238,11 +240,11 @@ void printMenu(map<int, menu> menumap) // CAUTION : very large dish name COULD b
     cout << "╚═══════════════════════════════════════╝\n\n";
 }
 
-void wannaBuy()
+void wannaBuy(string name)
 {
     while (true)
     {
-        cout << "Do you want to order anything from our menu? Answer with 'yes' / 'no', Press 'q' to quit" << endl;
+        cout << style::italic << style::reversed << " " << name << ", Do you want to order anything from our menu? Answer with 'yes' / 'no', Press 'q' to quit " << style::reset << endl;
         int choice = userInputHandler01();
         if (choice == 1)
             break;
@@ -253,7 +255,7 @@ void wannaBuy()
 
 int userInputHandler02(int lim) // done/q/<+ve int less than len of menumap>
 {
-    cout << "--> ";
+    cout << style::bold << style::blink << "--> " << style::reset;
     string choice = lowerCaser(fetchVar());
     if (choice == "done")
         return 1;
@@ -264,12 +266,14 @@ int userInputHandler02(int lim) // done/q/<+ve int less than len of menumap>
         int num = stoic(choice);
         if (num == -2147483647 || num == 0)
         {
-            cout << "'" << choice << "' is an invalid input!\n\n";
+            cout << style::bold << rang::fgB::red << style::reversed << "Invalid Input!\n\n"
+                 << style::reset;
             return 0;
         }
         if (num > lim)
         {
-            cout << choice << " is out of range!\n\n";
+            cout << style::bold << rang::fgB::red << style::reversed << choice << " is out of range!\n\n"
+                 << style::reset;
             return 0;
         }
         return num + 1234; // adding 1234 coz item 1 might be interpreted as DONE
@@ -282,12 +286,14 @@ int userInputHandler03() //<int grtr than/equal to 0 and less than 100>
     int num = stoic(choice);
     if (num == -2147483647)
     {
-        cout << choice << " is an invalid input!\n\n";
+        cout << style::bold << rang::fgB::red << style::reversed << choice << " is an invalid input!\n\n"
+             << style::reset;
         return 0;
     }
     if (num > 99)
     {
-        cout << "Maximum 99 dishes per person!\n\n";
+        cout << style::bold << rang::fgB::red << style::reversed << "Maximum 99 dishes per person!\n\n"
+             << style::reset;
         return 0;
     }
     return num + 1234; // adding 1234 coz 0 might be misinterpreted
@@ -296,10 +302,11 @@ int userInputHandler03() //<int grtr than/equal to 0 and less than 100>
 map<int, bill> takeOrder(map<int, menu> menumap)
 {
     map<int, bill> billmap;
-    cout << "Instructions :" << endl;
-    cout << " *\tEnter 'DISH NUMBER' to add the dish to the cart" << endl;
-    cout << " *\tEnter 'DONE' to checkout" << endl;
-    cout << " *\tPress 'q' to quit\n\n";
+    cout << style::italic << style::reversed << "Instructions" << style::reset << endl;
+    cout << "  ● Enter " << style::bold << "DISH NUMBER" << style::reset << "\tto add the dish to the cart" << endl;
+    cout << "  ● Enter " << style::bold << "DONE" << style::reset << "\t\tto checkout" << endl;
+    cout << "  ● Press " << style::bold << "q" << style::reset << "\t\tto quit\n\n"
+         << style::reset;
     while (true)
     {
         int choice = userInputHandler02(menumap.size());
@@ -309,14 +316,15 @@ map<int, bill> takeOrder(map<int, menu> menumap)
             if (billmap.size() != 0) // dont checkout with empty cart
                 return billmap;
             else
-                cout << "Cart is empty!, add something or press 'q' to quit\n\n";
+                cout << style::bold << rang::fgB::red << style::reversed << "Cart is empty!, add something or press 'q' to quit\n\n"
+                     << style::reset;
         else
         {
             choice -= 1234; // remove magic
             int howMany;
             while (true)
             {
-                cout << "How many " << menumap.at(choice).name << " do you want? --> ";
+                cout << style::italic << "How many " << menumap.at(choice).name << " do you want? " << style::reset << style::bold << "--> " << style::reset;
                 howMany = userInputHandler03();
                 if (howMany == 0)
                     continue;
@@ -331,30 +339,37 @@ map<int, bill> takeOrder(map<int, menu> menumap)
                 {
                     if (howMany == 0)
                     {
-                        cout << menumap.at(choice).name << " was not added to cart, alrady " << billmap.at(choice).qty << " in cart\n\n";
+                        cout << style::bold << rang::fgB::yellow << style::reversed << menumap.at(choice).name << " was not added to cart, already " << billmap.at(choice).qty << " in cart\n\n"
+                             << style::reset;
                         skipflag = true;
                         break;
                     }
                     if (howMany + (*i).second.qty > 99)
                     {
-                        cout << "Maximum 99 dishes per person!\n\n";
+                        cout << style::bold << rang::fgB::red << style::reversed << "Maximum 99 dishes per person!\n\n"
+                             << style::reset;
                         skipflag = true;
                         break;
                     }
                     (*i).second.qty += howMany;
                     (*i).second.cost = (*i).second.qty * menumap.at(choice).cost;
-                    cout << "Added " << howMany << " " << menumap.at(choice).name << " in cart, now " << (*i).second.qty << " in cart\n\n";
+                    cout << rang::fgB::blue << style::reversed << "Added " << howMany << " " << menumap.at(choice).name << " in cart, now " << (*i).second.qty << " in cart\n\n"
+                         << style::reset;
                     skipflag = true;
                     break;
                 }
             }
-            if (!skipflag && howMany != 0) // create new entry if item not in bill already and howmany =/= 0
+            if (skipflag)
+                continue;
+            if (howMany != 0) // create new entry if item not in bill already and howmany =/= 0
             {
                 billmap[billmap.size() + 1] = {menumap.at(choice).type, menumap.at(choice).name, (menumap.at(choice).cost * howMany), howMany};
-                cout << "Added " << howMany << " " << menumap.at(choice).name << " to cart\n\n";
+                cout << style::italic << rang::fgB::blue << style::reversed << "Added " << howMany << " " << menumap.at(choice).name << " to cart\n\n"
+                     << style::reset;
             }
-            else if (!skipflag && howMany == 0) // dont create new entry if item not in bill already but howmany=0
-                cout << menumap.at(choice).name << " was not added to cart\n\n";
+            else if (howMany == 0) // dont create new entry if item not in bill already but howmany==0
+                cout << style::bold << rang::fgB::yellow << style::reversed << menumap.at(choice).name << " was not added to cart\n\n"
+                     << style::reset;
         }
     }
 }
@@ -365,9 +380,11 @@ int printBill(map<int, bill> billmap)
     map<int, bill>::iterator i;
     cout << "╔══════════════════════════════════════════════╗" << endl;
     cout << "║                                              ║" << endl;
-    cout << "║                🧂 Your Bill 💰               ║" << endl;
+    cout << "║                " << style::blink << "🧂" << style::reset << style::bold << " Your Bill " << style::reset << style::blink << "💰" << style::reset << "               ║" << endl;
     cout << "║                                              ║" << endl;
     cout << "║══════════════════════════════════════════════║" << endl;
+
+    // incrementally creating rows as strings by measuring lengths of cells and padding them accordingly
     string print, tab = "\t", sep = "║", ws = " ";
     for (i = billmap.begin(); i != billmap.end(); i++)
     {
@@ -401,22 +418,22 @@ int printBill(map<int, bill> billmap)
         else if ((*i).second.cost < 100000)
             print += ws + to_string((*i).second.cost) + ws + sep;
 
-        cout << print << endl;
-        total += (*i).second.qty * (*i).second.cost;
+        cout << print << endl;     // print row by row
+        total += (*i).second.cost; // calc total cost while printing
     }
     cout << "║══════════════════════════════════════════════╝" << endl;
-    cout << "║ Total Cost: ₹ " << comma(to_string(total)) << "/-" << endl;
+    cout << "║ " << style::bold << rang::bg::black << rang::fgB::yellow << style::reversed << " Total Cost: ₹ " << comma(to_string(total)) << "/- (incl. taxes) " << style::reset << endl;
     cout << "╚═══════════════════════════════════════════════" << endl;
-
     return total;
 }
 
 map<int, bill> letsDel(map<int, bill> billmap, int lim);
-map<int, bill> wannaDel(map<int, bill> billmap, int lim)
+map<int, bill> wannaDel(map<int, bill> billmap, int lim, string name)
 {
     while (true)
     {
-        cout << "\nDo you want to remove anything from your bill? Answer with 'yes' / 'no', Press 'q' to quit" << endl;
+        cout << "\n"
+             << style::italic << style::reversed << " " << name << ", Do you want to remove anything from your bill? Answer with 'yes' / 'no', Press 'q' to quit " << style::reset << endl;
         int choice = userInputHandler01();
         if (choice == 1)
         {
@@ -434,15 +451,26 @@ int userInputHandler04(int lim)
     int num = stoic(choice);
     if (num == -2147483647 || num < 0)
     {
-        cout << "'" << choice << "' is an invalid input!\n\n";
+        cout << style::bold << ::fgB::red << style::reversed << "'" << choice << "' is an invalid input!\n\n"
+             << style::reset;
         return 0;
     }
     if (num > lim)
     {
-        cout << choice << " is out of range!\n\n";
+        cout << style::bold << rang::fgB::red << style::reversed << choice << " is out of range!\n\n"
+             << style::reset;
         return 0;
     }
     return num + 1234; // adding 1234 coz 0 might be misinterpreted
+}
+map<int, bill> resetKeys(map<int, bill> billmap) // if dishes 2,3,4 are ordered the bill shows them as 1 2 3, if 1 is removed, new bill shows 2 3 instead of 1 2. Fix:
+{
+    map<int, bill> newbillmap;
+    map<int, bill>::iterator i;
+    int assign = 1;
+    for (i = billmap.begin(); i != billmap.end(); i++, assign++)
+        newbillmap[assign] = {(*i).second.type, (*i).second.name, (*i).second.cost, (*i).second.qty};
+    return newbillmap;
 }
 map<int, bill> letsDel(map<int, bill> billmap, int lim)
 {
@@ -450,10 +478,10 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
     printBill(billmap);
     int history[lim], appendCtr = 0;
     int billLen = billmap.size();
-    cout << "\nInstructions :" << endl;
-    cout << " *\tEnter 'DISH NUMBER' to remove the dish from the cart" << endl;
-    cout << " *\tEnter 'DONE' to save" << endl;
-    cout << " *\tPress 'q' to quit\n\n";
+    cout << style::italic << style::reversed << "\nInstructions" << style::reset << endl;
+    cout << "  ● Enter " << style::bold << "DISH NUMBER" << style::reset << "\tto remove the dish from the cart" << endl;
+    cout << "  ● Enter " << style::bold << "DONE" << style::reset << "\t\tto save" << endl;
+    cout << "  ● Press " << style::bold << "q" << style::reset << "\t\tto quit\n\n";
     bool skipLoop = false;
     while (true)
     {
@@ -462,13 +490,13 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
             continue;
         if (choice == 1)
         {
-            if (billmap.size() != 0)
-                return billmap;
+            if (billmap.size() != 0) // proceed only if all items are not removed
+                return resetKeys(billmap);
             else
             {
                 clearScr();
-                cout << "😭️ All Items Removed from cart 😭️" << endl;
-                cout << "Thanks for visiting us, do come back later 😚️";
+                cout << style::blink << "😭️ " << style::reset << style::bold << "All Items Removed from cart" << style::reset << style::blink << " 😭️" << style::reset << endl;
+                cout << style::blink << "😚️ " << style::reset << style::bold << "Thanks for visiting us, do come back later" << style::reset << style::blink << " 😚️" << style::reset << endl;
                 showCursor();
                 exit(0);
             }
@@ -479,15 +507,17 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
             for (int i = 0; i < lim; i++)
                 if (history[i] == choice)
                 {
-                    cout << "dish " << choice << " was already removed from the bill, enter 'DONE' to save and print new bill\n\n";
+                    cout << style::bold << rang::fgB::yellow << style::reversed << "dish " << choice << " was already removed from the bill, enter 'DONE' to save and print new bill\n\n"
+                         << style::reset;
                     skipLoop = true;
                     break;
                 }
             if (skipLoop)
-                break;
+                continue;
             if (billmap.at(choice).qty == 1)
             {
-                cout << billmap.at(choice).name << " removed from cart\n\n";
+                cout << style::italic << rang::fgB::red << style::reversed << billmap.at(choice).name << " removed from cart\n\n"
+                     << style::reset;
                 history[appendCtr] = choice;
                 billmap.erase(choice); // src:https://www.geeksforgeeks.org/map-erase-function-in-c-stl/
                 appendCtr++;
@@ -496,16 +526,18 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
             {
                 while (true)
                 {
-                    cout << "There are " << billmap.at(choice).qty << "x " << billmap.at(choice).name << " in cart, how many to remove? --> ";
+                    cout << style::italic << "There are " << billmap.at(choice).qty << "x " << billmap.at(choice).name << " in cart, how many to remove? " << style::reset << style::bold << "--> ";
                     int howMany = userInputHandler04(billmap.at(choice).qty);
                     if (howMany == 0)
                         continue;
                     howMany -= 1234;
                     if (howMany == 0)
-                        cout << "Qunatity of " << billmap.at(choice).name << " not modified\n\n";
+                        cout << style::bold << rang::fgB::yellow << style::reversed << "Qunatity of " << billmap.at(choice).name << " not modified\n\n"
+                             << style::reset;
                     else if (howMany == billmap.at(choice).qty)
                     {
-                        cout << billmap.at(choice).name << " removed from cart\n\n";
+                        cout << style::italic << rang::fgB::red << style::reversed << billmap.at(choice).name << " removed from cart\n\n"
+                             << style::reset;
                         history[appendCtr] = choice;
                         billmap.erase(choice); // src:https://www.geeksforgeeks.org/map-erase-function-in-c-stl/
                         appendCtr++;
@@ -514,7 +546,8 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
                     {
                         billmap.at(choice).cost -= (billmap.at(choice).cost / billmap.at(choice).qty) * howMany;
                         billmap.at(choice).qty -= howMany;
-                        cout << billmap.at(choice).qty << "x " << billmap.at(choice).name << " left in cart\n\n";
+                        cout << style::italic << rang::fgB::blue << style::reversed << billmap.at(choice).qty << "x " << billmap.at(choice).name << " left in cart\n\n"
+                             << style::reset;
                     }
                     break;
                 }
@@ -527,7 +560,7 @@ void asktoPay(int amt)
 {
     while (true)
     {
-        cout << "Proceed to pay ₹" << amt << "? Confirm with 'yes' or 'no', Press 'q' to quit" << endl;
+        cout << style::bold << rang::bg::black << rang::fgB::yellow << style::reversed << "\n Proceed to pay ₹" << amt << "? Confirm with 'yes' or 'no', Press 'q' to quit " << style::reset << endl;
         int choice = userInputHandler01();
         if (choice == 1)
             break;
@@ -536,18 +569,17 @@ void asktoPay(int amt)
     }
 }
 
-void logOrder(string name, map<int, bill>, int total)
-{
-    // code to create order history by creating a file called <name>.txt with billmap and total in it.
-}
-
-void transact()
-{
-}
-
 void thankYou()
 {
-    cout << "\n\n\n\nThank YOU!";
+
+    cout << "\n\n\n\n"
+         << rang::fgB::magenta;
+    cout << "████████╗ ██╗  ██╗  █████╗  ███╗   ██╗ ██╗  ██╗    ██╗   ██╗  ██████╗  ██╗   ██╗    ██╗" << endl;
+    cout << "╚══██╔══╝ ██║  ██║ ██╔══██╗ ████╗  ██║ ██║ ██╔╝    ╚██╗ ██╔╝ ██╔═══██╗ ██║   ██║    ██║" << endl;
+    cout << "   ██║    ███████║ ███████║ ██╔██╗ ██║ █████╔╝      ╚████╔╝  ██║   ██║ ██║   ██║    ██║" << endl;
+    cout << "   ██║    ██╔══██║ ██╔══██║ ██║╚██╗██║ ██╔═██╗       ╚██╔╝   ██║   ██║ ██║   ██║    ╚═╝" << endl;
+    cout << "   ██║    ██║  ██║ ██║  ██║ ██║ ╚████║ ██║  ██╗       ██║    ╚██████╔╝ ╚██████╔╝    ██╗" << endl;
+    cout << "   ╚═╝    ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝  ╚═══╝ ╚═╝  ╚═╝       ╚═╝     ╚═════╝   ╚═════╝     ╚═╝" << style::reset;
 }
 
 int main()
@@ -555,23 +587,26 @@ int main()
     clearScr();
     greet();
     string name;
-    cout << "Enter Your Name: ";
+    cout << style::italic << "\nEnter Your Name" << style::reset << style::bold << " -->" << style::reset << " ";
+    hideCursor();
     cin >> name;
-    map<int, menu> menumap = decideMenu();
+    clearScr();
+    greet();
+    map<int, menu> menumap = decideMenu(name);
     clearScr();
     printMenu(menumap);
-    wannaBuy();
+    wannaBuy(name);
     clearScr();
     printMenu(menumap);
     map<int, bill> billmap = takeOrder(menumap);
     clearScr();
     int total = printBill(billmap);
-    billmap = wannaDel(billmap, menumap.size());
+    billmap = wannaDel(billmap, menumap.size(), name);
     clearScr();
     total = printBill(billmap);
     asktoPay(total);
-    transact();
-    logOrder(name, billmap, total);
+    clearScr();
+    printBill(billmap);
     thankYou();
     return 0;
 }
