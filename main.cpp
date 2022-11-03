@@ -220,7 +220,7 @@ void printMenu(map<int, menu> menumap) // CAUTION : very large dish name COULD b
     cout << "║                                       ║" << endl;
     cout << "║            " << style::blink << "🤤" << style::reset << style::bold << " Our Menu " << style::reset << style::blink << "🤤" << style::reset << "             ║" << endl;
     cout << "║                                       ║" << endl;
-    cout << "╠════╦══════════════════════════╦═══════╣" << endl;
+    cout << "║    ╔══════════════════════════╦═══════╣" << endl;
     map<int, menu>::iterator i;
     for (i = menumap.begin(); i != menumap.end(); i++)
     {
@@ -380,9 +380,9 @@ int printBill(map<int, bill> billmap)
     cout << "║                                                       ║" << endl;
     cout << "║                    " << style::blink << "🧂" << style::reset << style::bold << " Your Bill " << style::reset << style::blink << "💰" << style::reset << "                    ║" << endl;
     cout << "║                                                       ║" << endl;
-    cout << "╠════╦═══════════════════════════╦═══════╦═════╦════════╣" << endl;
-    cout << "║    ║ Dish Name                 ║ Rate  ║ Qty ║ Amt    ║" << endl;
-    cout << "╠════╬═══════════════════════════╬═══════╬═════╬════════╣" << endl;
+    cout << "║    ╔═══════════════════════════╦═══════╦═════╦════════╣" << endl;
+    cout << "║    ║ " << style::bold << "Dish Name" << style::reset << "                 ║ " << style::bold << "Rate" << style::reset << "  ║ " << style::bold << "Qty" << style::reset << " ║ " << style::bold << "Amt." << style::reset << "   ║" << endl;
+    cout << "║    ╠═══════════════════════════╬═══════╬═════╬════════╣" << endl;
 
     // incrementally creating rows as strings by measuring lengths of cells and padding them accordingly
     string print, tab = "\t", sep = "║", ws = " ";
@@ -430,17 +430,17 @@ int printBill(map<int, bill> billmap)
     // formatting last row
     string pad;
     if (total > 99 && total < 1000)
-        pad = "                   ";
-    else if (total > 999 && total < 10000)
-        pad = "                 ";
-    else if (total > 9999 && total < 100000)
         pad = "                ";
-    else if (total > 99999 && total < 1000000)
+    else if (total > 999 && total < 10000)
         pad = "              ";
+    else if (total > 9999 && total < 100000)
+        pad = "             ";
     else if (total > 99999 && total < 1000000)
-        pad = "            ";
+        pad = "           ";
+    else if (total > 99999 && total < 1000000)
+        pad = "         ";
     cout << "╠════╩═══════════════════════════╩═══════╩═════╩════════╣" << endl;
-    cout << "║ " << style::bold << rang::bg::black << rang::fgB::yellow << style::reversed << " Total Cost: ₹ " << comma(to_string(total)) << "/- (incl. taxes) " << style::reset << pad << "║" << endl;
+    cout << "║    " << style::bold << rang::bg::black << rang::fgB::yellow << style::reversed << " Total Cost: ₹ " << comma(to_string(total)) << "/- (incl. taxes) " << style::reset << pad << "║" << endl;
     cout << "╚═══════════════════════════════════════════════════════╝" << endl;
     return total;
 }
