@@ -1,9 +1,3 @@
-// TODO:
-// -> add comments to comma function(@Vedant)
-// -> agree on formatting
-// -> letsdel has minor bugs, fix pending
-// -> make porgram usable on win64
-
 #include <iostream>
 #include <string>
 #include <ctime> // to show current day of the week in greet()
@@ -29,7 +23,7 @@ void showCursor() // src:https://stackoverflow.com/a/55313602
 void quit()
 {
     clearScr();
-    cout << style::blink << "😚️ " << style::reset << style::bold << "Thanks for visiting us, do come back later" << style::reset << style::blink << " 😚️" << style::reset << endl;
+    cout << style::blink << "☺️  " << style::reset << style::bold << "Thanks for visiting us, do come back later" << style::reset << style::blink << " ☺️" << style::reset << endl;
     showCursor();
     exit(0); // stop program with exit code = 0, i.e. program stopped without any crashes
 }
@@ -85,13 +79,13 @@ string isItVeg(string checkDish)
 }
 string comma(string s) // thanks @Vedant
 {
-    int l = s.length();
+    int l = s.length(); // calculates length of string
     if (l <= 3)
-        return (s);
-    string s2 = "," + s.substr(l - 3, 3);
-    s = s.substr(0, l - 3);
-    int n = s.length();
-    if (l % 2 == 1)
+        return (s);                       // returns string as it is if less than 1000
+    string s2 = "," + s.substr(l - 3, 3); // extracts last 3 digits , adds comma in front and stores it in a new string
+    s = s.substr(0, l - 3);               // stores original number after above extraction
+    int n = s.length();                   // length of string after above extraction
+    if (l % 2 == 1)                       // groups 2 digits together,extracts them, adds a comma,puts new string in front of previously extracted digits
     {
         while (n)
         {
@@ -145,18 +139,21 @@ char *date() // returns current day of the week, depends on <ctime>. Returns poi
 }
 void greet()
 {
-    cout << rang::fgB::cyan;
-    cout << "██╗    ██╗ ███████╗ ██╗       ██████╗  ██████╗  ███╗   ███╗ ███████╗    ██╗" << endl;
-    cout << "██║    ██║ ██╔════╝ ██║      ██╔════╝ ██╔═══██╗ ████╗ ████║ ██╔════╝    ██║" << endl;
-    cout << "██║ █╗ ██║ █████╗   ██║      ██║      ██║   ██║ ██╔████╔██║ █████╗      ██║" << endl;
-    cout << "██║███╗██║ ██╔══╝   ██║      ██║      ██║   ██║ ██║╚██╔╝██║ ██╔══╝      ╚═╝" << endl;
-    cout << "╚███╔███╔╝ ███████╗ ███████╗ ╚██████╗ ╚██████╔╝ ██║ ╚═╝ ██║ ███████╗    ██╗" << endl;
-    cout << " ╚══╝╚══╝  ╚══════╝ ╚══════╝  ╚═════╝  ╚═════╝  ╚═╝     ╚═╝ ╚══════╝    ╚═╝\n\n"
+    cout << rang::bgB::yellow << rang::fgB::red;
+    cout << "                                                                               " << endl;
+    cout << "  ██╗    ██╗ ███████╗ ██╗       ██████╗  ██████╗  ███╗   ███╗ ███████╗    ██╗  " << endl;
+    cout << "  ██║    ██║ ██╔════╝ ██║      ██╔════╝ ██╔═══██╗ ████╗ ████║ ██╔════╝    ██║  " << endl;
+    cout << "  ██║ █╗ ██║ █████╗   ██║      ██║      ██║   ██║ ██╔████╔██║ █████╗      ██║  " << endl;
+    cout << "  ██║███╗██║ ██╔══╝   ██║      ██║      ██║   ██║ ██║╚██╔╝██║ ██╔══╝      ╚═╝  " << endl;
+    cout << "  ╚███╔███╔╝ ███████╗ ███████╗ ╚██████╗ ╚██████╔╝ ██║ ╚═╝ ██║ ███████╗    ██╗  " << endl;
+    cout << "   ╚══╝╚══╝  ╚══════╝ ╚══════╝  ╚═════╝  ╚═════╝  ╚═╝     ╚═╝ ╚══════╝    ╚═╝  " << endl;
+    cout << "                                                                               \n\n"
          << style::reset;
     char *today;
     today = date();
-    cout << "\t\t\t🎊️ " << style::italic << rang::fgB::magenta << today << " Exclusive Offers! 🎊️\n\n";
-    cout << "\t\tEnjoy discounts on all dishes every " << today << "!" << style::reset << "\n\n";
+    cout << style::blink << "\t\t\t🎊️ " << style::reset << style::italic << rang::fgB::blue << style::bold << today << style::reset << style::italic << rang::fgB::blue << " Exclusive Offers! " << style::blink << "🎊️\n\n"
+         << style::reset;
+    cout << style::italic << rang::fgB::blue << "\t\tEnjoy discounts on all dishes every " << style::bold << today << style::reset << style::italic << rang::fgB::blue << "!" << style::reset << "\n\n";
 }
 
 int userInputHandler01() // yes/no/q
@@ -208,7 +205,8 @@ map<int, menu> decideMenu(string name)
 {
     while (true)
     {
-        cout << style::italic << style::reversed << " " << name << ", Are you Jain? Answer with 'yes' / 'no', Press 'q' to quit " << style::reset << endl;
+        cout << style::italic << rang::fg::magenta << rang::bgB::gray
+             << style::reversed << " " << name << ", Are you Vegetarian? Answer with 'yes' / 'no', Press 'q' to quit " << style::reset << endl;
         int choice = userInputHandler01();
         if (choice == 1)
             return setMenuVeg();
@@ -222,7 +220,7 @@ void printMenu(map<int, menu> menumap) // CAUTION : very large dish name COULD b
     cout << "║                                       ║" << endl;
     cout << "║            " << style::blink << "🤤" << style::reset << style::bold << " Our Menu " << style::reset << style::blink << "🤤" << style::reset << "             ║" << endl;
     cout << "║                                       ║" << endl;
-    cout << "║═══════════════════════════════════════║" << endl;
+    cout << "╠════╦══════════════════════════╦═══════╣" << endl;
     map<int, menu>::iterator i;
     for (i = menumap.begin(); i != menumap.end(); i++)
     {
@@ -237,14 +235,14 @@ void printMenu(map<int, menu> menumap) // CAUTION : very large dish name COULD b
             cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t║ ₹ " << (*i).second.cost << " ║";
         cout << "\n";
     }
-    cout << "╚═══════════════════════════════════════╝\n\n";
+    cout << "╚════╩══════════════════════════╩═══════╝\n\n";
 }
 
 void wannaBuy(string name)
 {
     while (true)
     {
-        cout << style::italic << style::reversed << " " << name << ", Do you want to order anything from our menu? Answer with 'yes' / 'no', Press 'q' to quit " << style::reset << endl;
+        cout << style::italic << rang::fg::magenta << rang::bgB::gray << style::reversed << " " << name << ", Do you want to order anything from our menu? Answer with 'yes' / 'no', Press 'q' to quit " << style::reset << endl;
         int choice = userInputHandler01();
         if (choice == 1)
             break;
@@ -302,7 +300,7 @@ int userInputHandler03() //<int grtr than/equal to 0 and less than 100>
 map<int, bill> takeOrder(map<int, menu> menumap)
 {
     map<int, bill> billmap;
-    cout << style::italic << style::reversed << "Instructions" << style::reset << endl;
+    cout << style::italic << style::reversed << "Instructions " << style::reset << endl;
     cout << "  ● Enter " << style::bold << "DISH NUMBER" << style::reset << "\tto add the dish to the cart" << endl;
     cout << "  ● Enter " << style::bold << "DONE" << style::reset << "\t\tto checkout" << endl;
     cout << "  ● Press " << style::bold << "q" << style::reset << "\t\tto quit\n\n"
@@ -378,11 +376,13 @@ int printBill(map<int, bill> billmap)
 {
     int total;
     map<int, bill>::iterator i;
-    cout << "╔══════════════════════════════════════════════╗" << endl;
-    cout << "║                                              ║" << endl;
-    cout << "║                " << style::blink << "🧂" << style::reset << style::bold << " Your Bill " << style::reset << style::blink << "💰" << style::reset << "               ║" << endl;
-    cout << "║                                              ║" << endl;
-    cout << "║══════════════════════════════════════════════║" << endl;
+    cout << "╔═══════════════════════════════════════════════════════╗" << endl;
+    cout << "║                                                       ║" << endl;
+    cout << "║                    " << style::blink << "🧂" << style::reset << style::bold << " Your Bill " << style::reset << style::blink << "💰" << style::reset << "                    ║" << endl;
+    cout << "║                                                       ║" << endl;
+    cout << "╠════╦═══════════════════════════╦═══════╦═════╦════════╣" << endl;
+    cout << "║    ║ Dish Name                 ║ Rate  ║ Qty ║ Amt    ║" << endl;
+    cout << "╠════╬═══════════════════════════╬═══════╬═════╬════════╣" << endl;
 
     // incrementally creating rows as strings by measuring lengths of cells and padding them accordingly
     string print, tab = "\t", sep = "║", ws = " ";
@@ -396,13 +396,18 @@ int printBill(map<int, bill> billmap)
 
         // aligning dish names
         if ((*i).second.name.length() < 5)
-            print += tab + tab + ws + sep + ws + "x" + to_string((*i).second.qty);
+            print += tab + tab + ws + sep + ws;
         else if ((*i).second.name.length() <= 13 && (*i).second.name.length() > 5)
-            print += tab + ws + sep + ws + "x" + to_string((*i).second.qty);
+            print += tab + ws + sep + ws;
         else if ((*i).second.name.length() > 13)
-            print += ws + sep + ws + "x" + to_string((*i).second.qty);
+            print += ws + sep + ws;
         else
-            print += tab + tab + ws + sep + ws + "x" + to_string((*i).second.qty);
+            print += tab + tab + ws + sep + ws;
+
+        // aligning rate
+        print += to_string((*i).second.cost / (*i).second.qty) + ws + ws + ws + sep + ws;
+
+        print += "x" + to_string((*i).second.qty);
 
         // aligning dish qty
         if ((*i).second.qty < 10)
@@ -412,18 +417,31 @@ int printBill(map<int, bill> billmap)
 
         // aligning dish qty * dish price
         if ((*i).second.cost < 1000)
-            print += ws + to_string((*i).second.cost) + ws + ws + ws + sep;
+            print += ws + ws + ws + ws + comma(to_string((*i).second.cost)) + ws + sep;
         else if ((*i).second.cost < 10000)
-            print += ws + to_string((*i).second.cost) + ws + ws + sep;
+            print += ws + ws + comma(to_string((*i).second.cost)) + ws + sep;
         else if ((*i).second.cost < 100000)
-            print += ws + to_string((*i).second.cost) + ws + sep;
+            print += ws + comma(to_string((*i).second.cost)) + ws + sep;
 
         cout << print << endl;     // print row by row
         total += (*i).second.cost; // calc total cost while printing
     }
-    cout << "║══════════════════════════════════════════════╝" << endl;
-    cout << "║ " << style::bold << rang::bg::black << rang::fgB::yellow << style::reversed << " Total Cost: ₹ " << comma(to_string(total)) << "/- (incl. taxes) " << style::reset << endl;
-    cout << "╚═══════════════════════════════════════════════" << endl;
+
+    // formatting last row
+    string pad;
+    if (total > 99 && total < 1000)
+        pad = "                   ";
+    else if (total > 999 && total < 10000)
+        pad = "                 ";
+    else if (total > 9999 && total < 100000)
+        pad = "                ";
+    else if (total > 99999 && total < 1000000)
+        pad = "              ";
+    else if (total > 99999 && total < 1000000)
+        pad = "            ";
+    cout << "╠════╩═══════════════════════════╩═══════╩═════╩════════╣" << endl;
+    cout << "║ " << style::bold << rang::bg::black << rang::fgB::yellow << style::reversed << " Total Cost: ₹ " << comma(to_string(total)) << "/- (incl. taxes) " << style::reset << pad << "║" << endl;
+    cout << "╚═══════════════════════════════════════════════════════╝" << endl;
     return total;
 }
 
@@ -433,7 +451,7 @@ map<int, bill> wannaDel(map<int, bill> billmap, int lim, string name)
     while (true)
     {
         cout << "\n"
-             << style::italic << style::reversed << " " << name << ", Do you want to remove anything from your bill? Answer with 'yes' / 'no', Press 'q' to quit " << style::reset << endl;
+             << style::italic << rang::fg::magenta << rang::bgB::gray << style::reversed << " " << name << ", Do you want to remove anything from your bill? Answer with 'yes' / 'no', Press 'q' to quit " << style::reset << endl;
         int choice = userInputHandler01();
         if (choice == 1)
         {
@@ -478,7 +496,7 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
     printBill(billmap);
     int history[lim], appendCtr = 0;
     int billLen = billmap.size();
-    cout << style::italic << style::reversed << "\nInstructions" << style::reset << endl;
+    cout << style::italic << style::reversed << "\nInstructions " << style::reset << endl;
     cout << "  ● Enter " << style::bold << "DISH NUMBER" << style::reset << "\tto remove the dish from the cart" << endl;
     cout << "  ● Enter " << style::bold << "DONE" << style::reset << "\t\tto save" << endl;
     cout << "  ● Press " << style::bold << "q" << style::reset << "\t\tto quit\n\n";
@@ -496,7 +514,7 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
             {
                 clearScr();
                 cout << style::blink << "😭️ " << style::reset << style::bold << "All Items Removed from cart" << style::reset << style::blink << " 😭️" << style::reset << endl;
-                cout << style::blink << "😚️ " << style::reset << style::bold << "Thanks for visiting us, do come back later" << style::reset << style::blink << " 😚️" << style::reset << endl;
+                cout << style::blink << "☺️  " << style::reset << style::bold << "Thanks for visiting us, do come back later" << style::reset << style::blink << " ☺️" << style::reset << endl;
                 showCursor();
                 exit(0);
             }
