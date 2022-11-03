@@ -381,7 +381,7 @@ int printBill(map<int, bill> billmap)
     cout << "║                    " << style::blink << "🧂" << style::reset << style::bold << " Your Bill " << style::reset << style::blink << "💰" << style::reset << "                    ║" << endl;
     cout << "║                                                       ║" << endl;
     cout << "║    ╔═══════════════════════════╦═══════╦═════╦════════╣" << endl;
-    cout << "║    ║ " << style::bold << "Dish Name" << style::reset << "                 ║ " << style::bold << "Rate" << style::reset << "  ║ " << style::bold << "Qty" << style::reset << " ║ " << style::bold << "Amt." << style::reset << "   ║" << endl;
+    cout << "║    ║ " << style::bold << "Dish Name" << style::reset << "                 ║ " << style::bold << "Rate" << style::reset << "  ║ " << style::bold << "Qty" << style::reset << " ║ " << style::bold << "Amt(₹)" << style::reset << " ║" << endl;
     cout << "║    ╠═══════════════════════════╬═══════╬═════╬════════╣" << endl;
 
     // incrementally creating rows as strings by measuring lengths of cells and padding them accordingly
