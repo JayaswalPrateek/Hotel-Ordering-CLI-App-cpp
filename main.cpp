@@ -2,7 +2,7 @@
 #include <string>
 #include <ctime> // to show current day of the week in greet()
 #include <map>
-#include "dep/rang.hpp" // for text coloring and formatting
+#include "rang.hpp" // for text coloring and formatting
 using namespace std;
 using namespace rang;
 
@@ -300,7 +300,7 @@ int userInputHandler03() //<int grtr than/equal to 0 and less than 100>
 map<int, bill> takeOrder(map<int, menu> menumap)
 {
     map<int, bill> billmap;
-    cout << style::italic << style::reversed << "Instructions " << style::reset << endl;
+    cout << style::italic << style::reversed << " Instructions: " << style::reset << endl;
     cout << "  ● Enter " << style::bold << "DISH NUMBER" << style::reset << "\tto add the dish to the cart" << endl;
     cout << "  ● Enter " << style::bold << "DONE" << style::reset << "\t\tto checkout" << endl;
     cout << "  ● Press " << style::bold << "q" << style::reset << "\t\tto quit\n\n"
@@ -500,7 +500,6 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
     cout << "  ● Enter " << style::bold << "DISH NUMBER" << style::reset << "\tto remove the dish from the cart" << endl;
     cout << "  ● Enter " << style::bold << "DONE" << style::reset << "\t\tto save" << endl;
     cout << "  ● Press " << style::bold << "q" << style::reset << "\t\tto quit\n\n";
-    bool skipLoop = false;
     while (true)
     {
         int choice = userInputHandler02(billLen);
@@ -522,6 +521,7 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
         else
         {
             choice -= 1234;
+            bool skipLoop = false;
             for (int i = 0; i < lim; i++)
                 if (history[i] == choice)
                 {
