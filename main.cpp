@@ -1,10 +1,32 @@
+#include "rang.hpp" // for text coloring and formatting
+using namespace rang;
+
 #include <iostream>
 #include <string>
 #include <ctime> // to show current day of the week in greet()
 #include <map>
-#include "rang.hpp" // for text coloring and formatting
 using namespace std;
-using namespace rang;
+
+// importing platform specific header files for getting console width
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+#include <Windows.h>
+#elif defined(__linux__)
+#include <sys/ioctl.h>
+#endif        // imported
+int howWide() // returns console width
+{
+#if defined(_WIN32)
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    return (int)(csbi.srWindow.Right - csbi.srWindow.Left + 1);
+#elif defined(__linux__)
+    struct winsize w;
+    ioctl(fileno(stdout), TIOCGWINSZ, &w);
+    return (int)(w.ws_col);
+#endif
+}
 
 // #### SHORT & REUSABLE FUNCTIONS STARTED ####
 void clearScr()
@@ -605,6 +627,8 @@ void thankYou()
 
 int main()
 {
+    // int w = howWide();
+    // cout << "width = " << w;
     clearScr();
     greet();
     cout << style::italic << "\nEnter Your Name" << style::reset << style::bold << " -->" << style::reset << " ";
