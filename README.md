@@ -1,7 +1,5 @@
 # PPS Project
 
----
-
 ## Group Details
 
 |       Name        |   SAP ID    | Roll No. |
@@ -9,13 +7,11 @@
 | Prateek Jayaswal  | 70412200052 |   I036   |
 | Vedant Maheshwari | 70412200053 |   I051   |
 
----
 
 ## Problem Statement
 
 > **The objective of the project is to demonstrate a rubust and full proof programming logic for a menu based ordering system written in c++**
 
----
 
 ## Code
 
@@ -401,12 +397,8 @@ map<int, bill> resetKeys(map<int, bill> billmap) // if dishes 2,3,4 are ordered 
 
 - reset order of keys of maps after deletion
 
----
-
 ## Code
 [Our code is available on github.com](https://github.com/JayaswalPrateek/ppsSem1project/blob/main/main.cpp "main.cpp")
-
----
 
 ## Tech Used
 
@@ -416,7 +408,6 @@ map<int, bill> resetKeys(map<int, bill> billmap) // if dishes 2,3,4 are ordered 
 - Linter
 - [Rang](https://github.com/agauniyal/rang)
 
----
 
 ## Algorithm
 
@@ -435,19 +426,13 @@ map<int, bill> resetKeys(map<int, bill> billmap) // if dishes 2,3,4 are ordered 
 13. go to step 11
 14. STOP
 
----
-
 ## Flowchart
 
 ![alt text](https://raw.githubusercontent.com/JayaswalPrateek/ppsSem1project/main/flowchart.png)
 
----
-
 ## Demo
 
 ![](https://raw.githubusercontent.com/JayaswalPrateek/ppsSem1project/main/demo.gif)
-
----
 
 ## Conclusion
 
