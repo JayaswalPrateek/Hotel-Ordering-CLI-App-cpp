@@ -7,26 +7,7 @@ using namespace rang;
 #include <map>
 using namespace std;
 
-// importing platform specific header files for getting console width
-#if defined(_WIN32)
-#define WIN32_LEAN_AND_MEAN
-#define VC_EXTRALEAN
-#include <Windows.h>
-#elif defined(__linux__)
-#include <sys/ioctl.h>
-#endif        // imported
-int howWide() // returns console width
-{
-#if defined(_WIN32)
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-    return (int)(csbi.srWindow.Right - csbi.srWindow.Left + 1);
-#elif defined(__linux__)
-    struct winsize w;
-    ioctl(fileno(stdout), TIOCGWINSZ, &w);
-    return (int)(w.ws_col);
-#endif
-}
+const int errCode = -2147483647;
 
 // #### SHORT & REUSABLE FUNCTIONS STARTED ####
 void clearScr()
@@ -93,7 +74,7 @@ int stoic(string snum) // converts string to int. Similar func available in STL,
             ctr *= 10;
         }
         else
-            return -2147483647; // returns magic number to signal error -(largest value of an int - 1)
+            return errCode;
     return num;
 }
 string isItVeg(string checkDish)
@@ -289,7 +270,7 @@ int userInputHandler02(int lim) // done/q/<+ve int less than len of menumap>
     else
     {
         int num = stoic(choice);
-        if (num == -2147483647 || num == 0)
+        if (num == errCode || num == 0)
         {
             cout << style::bold << rang::fgB::red << style::reversed << "Invalid Input!\n\n"
                  << style::reset;
@@ -310,7 +291,7 @@ int userInputHandler03() //<int grtr than/equal to 0 and less than 100>
 {
     string choice = fetchVar();
     int num = stoic(choice);
-    if (num == -2147483647)
+    if (num == errCode)
     {
         cout << style::bold << rang::fgB::red << style::reversed << choice << " is an invalid input!\n\n"
              << style::reset;
@@ -495,7 +476,7 @@ int userInputHandler04(int lim)
 {
     string choice = fetchVar();
     int num = stoic(choice);
-    if (num == -2147483647 || num < 0)
+    if (num == errCode || num < 0)
     {
         cout << style::bold << ::fgB::red << style::reversed << "'" << choice << "' is an invalid input!\n\n"
              << style::reset;
@@ -627,8 +608,6 @@ void thankYou()
 
 int main()
 {
-    // int w = howWide();
-    // cout << "width = " << w;
     clearScr();
     greet();
     cout << style::italic << "\nEnter Your Name" << style::reset << style::bold << " -->" << style::reset << " ";
