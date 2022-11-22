@@ -10,6 +10,11 @@ using namespace rang;
 
 int columns, rows;//global variables
 // #### SHORT & REUSABLE FUNCTIONS STARTED ####
+void space(int n)
+    {
+        for(int i=1;i<=n;i++)
+        cout<<" ";
+    }
 void clearScr()
     {
     // This is an ANSI Escape Code. It tells the console to flush the screen and reset the cursor. Works on Windows/Linux. src:https://stackoverflow.com/a/32008479
@@ -28,7 +33,7 @@ void quit()
     clearScr();
     for(int i=1;i<=(columns-50)/2;i++)
     cout<<" ";
-    cout << style::blink << "☺️  " << style::reset<<fg::magenta << style::bold << "Thanks for visiting us, do come back later" << style::reset<<fg::reset << style::blink << " ☺️" << style::reset << endl;
+    cout << style::blink << "    "<<fg::magenta << style::bold << "Thanks for visiting us, do come back later" << style::reset<<fg::reset <<  "   "  << endl;
     showCursor();
     exit(0); // stop program with exit code = 0, i.e. program stopped without any crashes
     }
@@ -76,9 +81,9 @@ int stoic(string snum) // converts string to int. Similar func available in STL,
 string isItVeg(string checkDish)
     {
     if ( checkDish == "veg" )
-        return "🟢";
+        return "VG";
     else if ( checkDish == "nonveg" )
-        return "🔴";
+        return "NV";
     else
         crash("isItVeg(), probably mispelled word veg/nonveg for a 'type' member of struct menu");
     return "";
@@ -145,37 +150,27 @@ char* date() // returns current day of the week, depends on <ctime>. Returns poi
     }
 void greet()
     {
-    for(int i=1;i<=(columns-67)/2;i++)
-    cout<<" ";
+    space((columns-67)/2);
     cout << rang::bgB::yellow << rang::fgB::red<<"                                                                               " <<rang::bg::reset << rang::fg::reset<< endl;
-    for(int i=1;i<=(columns-67)/2;i++)
-    cout<<" ";
+    space((columns-67)/2);
     cout << rang::bgB::yellow << rang::fgB::red<<"  ██╗    ██╗ ███████╗ ██╗       ██████╗  ██████╗  ███╗   ███╗ ███████╗    ██╗  " <<rang::bg::reset << rang::fg::reset<< endl;
-    for(int i=1;i<=(columns-67)/2;i++)
-    cout<<" ";
+    space((columns-67)/2);
     cout <<rang::bgB::yellow << rang::fgB::red<< "  ██║    ██║ ██╔════╝ ██║      ██╔════╝ ██╔═══██╗ ████╗ ████║ ██╔════╝    ██║  " <<rang::bg::reset << rang::fg::reset<< endl;
-    for(int i=1;i<=(columns-67)/2;i++)
-    cout<<" ";
+    space((columns-67)/2);
     cout <<rang::bgB::yellow << rang::fgB::red<< "  ██║ █╗ ██║ █████╗   ██║      ██║      ██║   ██║ ██╔████╔██║ █████╗      ██║  " <<rang::bg::reset << rang::fg::reset<< endl;
-    for(int i=1;i<=(columns-67)/2;i++)
-    cout<<" ";
+    space((columns-67)/2);
     cout << rang::bgB::yellow << rang::fgB::red<<"  ██║███╗██║ ██╔══╝   ██║      ██║      ██║   ██║ ██║╚██╔╝██║ ██╔══╝      ╚═╝  " <<rang::bg::reset << rang::fg::reset<< endl;
-    for(int i=1;i<=(columns-67)/2;i++)
-    cout<<" ";
+    space((columns-67)/2);
     cout << rang::bgB::yellow << rang::fgB::red<<"  ╚███╔███╔╝ ███████╗ ███████╗ ╚██████╗ ╚██████╔╝ ██║ ╚═╝ ██║ ███████╗    ██╗  " <<rang::bg::reset << rang::fg::reset<< endl;
-    for(int i=1;i<=(columns-67)/2;i++)
-    cout<<" ";
+    space((columns-67)/2);
     cout <<rang::bgB::yellow << rang::fgB::red<< "   ╚══╝╚══╝  ╚══════╝ ╚══════╝  ╚═════╝  ╚═════╝  ╚═╝     ╚═╝ ╚══════╝    ╚═╝  " <<rang::bg::reset << rang::fg::reset<< endl;
-    for(int i=1;i<=(columns-67)/2;i++)
-    cout<<" ";
+    space((columns-67)/2);
     cout <<rang::bgB::yellow << rang::fgB::red<<rang::bgB::yellow << rang::fgB::red<< "                                                                               \n\n" <<rang::bg::reset << rang::fg::reset<< style::reset;
     char* today;
     today = date();
-    for(int i=1;i<=(columns-67)/2+23;i++)
-    cout<<" ";
-    cout << style::blink << "🎊️ " << style::reset << style::italic << rang::fgB::blue << style::bold << today << style::reset << style::italic << rang::fgB::blue << " Exclusive Offers! " << style::blink << "🎊️\n\n" << style::reset;
-    for(int i=1;i<=(columns-67)/2+15;i++)
-    cout<<" ";
+   space((columns-67)/2+23);
+    cout << style::blink << "   " << style::italic << rang::fgB::blue << style::bold << today << style::reset << style::italic<<style::blink << rang::fgB::blue << " Exclusive Offers! "  << "  ️\n\n" << style::reset;
+    space((columns-67)/2+15);
     cout << style::italic << rang::fgB::blue << "Enjoy discounts on all dishes every " << style::bold << today << style::reset << style::italic << rang::fgB::blue << "!" << style::reset << "\n\n";
     }
 
@@ -227,7 +222,7 @@ map<int , menu> decideMenu(string name)
     {
     while ( true )
         {
-        cout << style::italic << rang::fg::magenta << rang::bgB::gray << style::reversed << " " << name << ", Are you Vegetarian? Answer with 'yes' / 'no', Press 'q' to quit " << style::reset << endl;
+        cout << style::italic << rang::fg::magenta << rang::bgB::gray << style::reversed<< " " << name << ", Are you Vegetarian? Answer with 'yes' / 'no', Press 'q' to quit "<<style::reset << endl;
         int choice = userInputHandler01();
         if ( choice == 1 )
             return setMenuVeg();
@@ -237,20 +232,15 @@ map<int , menu> decideMenu(string name)
     }
 void printMenu(map<int , menu> menumap) // CAUTION : very large dish name COULD break alignment but wont crash() :(
     {
-    for(int i=1;i<=(columns-40)/2;i++)
-    cout<<" ";
+
     cout << "╔═══════════════════════════════════════╗" << endl;
-    for(int i=1;i<=(columns-40)/2;i++)
-    cout<<" ";
+
     cout << "║                                       ║" << endl;
-    for(int i=1;i<=(columns-40)/2;i++)
-    cout<<" ";
-    cout << "║            " << style::blink << "🤤" << style::reset << style::bold << " Our Menu " << style::reset << style::blink << "🤤" << style::reset << "             ║" << endl;
-    for(int i=1;i<=(columns-40)/2;i++)
-    cout<<" ";
+
+    cout << "║            " << style::blink << "  "  << style::bold << " Our Menu " << style::reset <<  "  " << "             ║" << endl;
+
     cout << "║                                       ║" << endl;
-    for(int i=1;i<=(columns-40)/2;i++)
-    cout<<" ";
+
     cout << "║    ╔══════════════════════════╦═══════╣" << endl;
     map<int , menu>::iterator i;
     for ( i = menumap.begin(); i != menumap.end(); i++ )
@@ -258,33 +248,28 @@ void printMenu(map<int , menu> menumap) // CAUTION : very large dish name COULD 
         if ( (*i).first < 10 )                    // align dish number
             if ( (*i).second.name.length() < 11 ) // align dish name
             {
-                for(int i=1;i<=(columns-40)/2;i++)
-                cout<<" ";
+
                 cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t\t║ ₹ " << (*i).second.cost << " ║";
             }
             else
             {
-                for(int i=1;i<=(columns-40)/2;i++)
-                cout<<" ";
+
                 cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t║ ₹ " << (*i).second.cost << " ║";
             }
         else if ( (*i).second.name.length() < 11 ) // align dish number & dish name
         {
 
-            for(int i=1;i<=(columns-40)/2;i++)
-            cout<<" ";
+
             cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t\t║ ₹ " << (*i).second.cost << " ║";
         }
         else
         {
-            for(int i=1;i<=(columns-40)/2;i++)
-            cout<<" ";
+
             cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t║ ₹ " << (*i).second.cost << " ║";
         }
         cout << "\n";
         }
-    for(int i=1;i<=(columns-40)/2;i++)
-    cout<<" ";
+
     cout << "╚════╩══════════════════════════╩═══════╝\n\n";
     }
 
@@ -416,26 +401,19 @@ int printBill(map<int , bill> billmap)
     {
     int total;
     map<int , bill>::iterator i;
-    for(int i=1;i<=(columns-58)/2;i++)
-    cout<<" ";
+
     cout << "╔═══════════════════════════════════════════════════════╗" << endl;
-    for(int i=1;i<=(columns-58)/2;i++)
-    cout<<" ";
+
     cout << "║                                                       ║" << endl;
-    for(int i=1;i<=(columns-58)/2;i++)
-    cout<<" ";
-    cout << "║                    " << style::blink << "🧂" << style::reset << style::bold << " Your Bill " << style::reset << style::blink << "💰" << style::reset << "                    ║" << endl;
-    for(int i=1;i<=(columns-58)/2;i++)
-    cout<<" ";
+
+    cout << "║                    " << style::blink << "  "  << style::bold << " Your Bill " << style::reset<< "                      ║" << endl;
+
     cout << "║                                                       ║" << endl;
-    for(int i=1;i<=(columns-58)/2;i++)
-    cout<<" ";
+
     cout << "║    ╔═══════════════════════════╦═══════╦═════╦════════╣" << endl;
-    for(int i=1;i<=(columns-58)/2;i++)
-    cout<<" ";
+
     cout << "║    ║ " << style::bold << "Dish Name" << style::reset << "                 ║ " << style::bold << "Rate" << style::reset << "  ║ " << style::bold << "Qty" << style::reset << " ║ " << style::bold << "Amt(₹)" << style::reset << " ║" << endl;
-    for(int i=1;i<=(columns-58)/2;i++)
-    cout<<" ";
+
     cout << "║    ╠═══════════════════════════╬═══════╬═════╬════════╣" << endl;
 
     // incrementally creating rows as strings by measuring lengths of cells and padding them accordingly
@@ -444,19 +422,19 @@ int printBill(map<int , bill> billmap)
         {
         // aligning dish numbers
         if ( (*i).first < 10 )
-            print = sep + ws + to_string((*i).first) + ws + ws + sep + ws + isItVeg((*i).second.type) + ws + (*i).second.name + tab;
+            print = sep + ws  + to_string((*i).first) + ws + ws + sep + ws + isItVeg((*i).second.type) + ws + (*i).second.name + tab;
         else if ( (*i).first >= 10 )
             print = sep + ws + to_string((*i).first) + ws + sep + ws + isItVeg((*i).second.type) + ws + (*i).second.name + tab;
 
         // aligning dish names
         if ( (*i).second.name.length() < 5 )
-            print += tab + tab  + sep + ws;
+            print += tab + tab+ws  + sep + ws;
         else if ( (*i).second.name.length() <= 13 && (*i).second.name.length() > 5 )
-            print += tab +  sep + ws;
+            print += tab + ws+ sep + ws;
         else if ( (*i).second.name.length() > 13 )
-            print +=  sep + ws;
+            print += ws+ sep + ws;
         else
-            print += tab + tab  + sep + ws;
+            print += tab + tab +ws + sep + ws;
 
         // aligning rate
         print += to_string((*i).second.cost / (*i).second.qty) + ws + ws + ws + sep + ws;
@@ -477,8 +455,7 @@ int printBill(map<int , bill> billmap)
         else if ( (*i).second.cost < 100000 )
             print += ws + comma(to_string((*i).second.cost)) + ws + sep;
 
-        for(int i=1;i<=(columns-58)/2;i++)
-        cout<<" ";
+
         cout << print << endl;     // print row by row
         total += (*i).second.cost; // calc total cost while printing
         }
@@ -495,14 +472,11 @@ int printBill(map<int , bill> billmap)
         pad = "           ";
     else if ( total > 99999 && total < 1000000 )
         pad = "         ";
-    for(int i=1;i<=(columns-58)/2;i++)
-    cout<<" ";
+
     cout << "╠════╩═══════════════════════════╩═══════╩═════╩════════╣" << endl;
-    for(int i=1;i<=(columns-58)/2;i++)
-    cout<<" ";
+
     cout << "║    " << style::bold << rang::bg::black << rang::fgB::yellow << style::reversed << " Total Cost: ₹ " << comma(to_string(total)) << "/- (incl. taxes) " << style::reset << pad << "║" << endl;
-    for(int i=1;i<=(columns-58)/2;i++)
-    cout<<" ";
+
     cout << "╚═══════════════════════════════════════════════════════╝" << endl;
     return total;
     }
@@ -512,7 +486,9 @@ map<int , bill> wannaDel(map<int , bill> billmap , int lim , string name)
     {
     while ( true )
         {
-        cout << "\n" << style::italic << rang::fg::magenta << rang::bgB::gray << style::reversed << " " << name << ", Do you want to remove anything from your bill? Answer with 'yes' / 'no', Press 'q' to quit " << style::reset << endl;
+        cout << "\n";
+        cout << style::italic << rang::fg::magenta << rang::bgB::gray << style::reversed;
+        cout<< " " << name << ", Do you want to remove anything from your bill? Answer with 'yes' / 'no', Press 'q' to quit " << style::reset << endl;
         int choice = userInputHandler01();
         if ( choice == 1 )
             {
@@ -571,8 +547,8 @@ map<int , bill> letsDel(map<int , bill> billmap , int lim)
             else
                 {
                 clearScr();
-                cout << style::blink << "😭️ " << style::reset << style::bold << "All Items Removed from cart" << style::reset << style::blink << " 😭️" << style::reset << endl;
-                cout << style::blink << "☺️  " << style::reset << style::bold << "Thanks for visiting us, do come back later" << style::reset << style::blink << " ☺️" << style::reset << endl;
+                cout << style::bold << "All Items Removed from cart" << style::reset  << endl;
+                cout << style::blink << "    " << style::bold << "Thanks for visiting us, do come back later" << style::reset << endl;
                 showCursor();
                 exit(0);
                 }
@@ -645,26 +621,20 @@ void thankYou()
     {
 
     cout << "\n\n\n\n" << rang::fgB::magenta;
-    for(int i=1;i<=(columns-76)/2;i++)
-    cout<<" ";
+    space((columns-87)/2);
     cout << "████████╗ ██╗  ██╗  █████╗  ███╗   ██╗ ██╗  ██╗    ██╗   ██╗  ██████╗  ██╗   ██╗    ██╗" << endl;
-    for(int i=1;i<=(columns-76)/2;i++)
-    cout<<" ";
+    space((columns-87)/2);
     cout << "╚══██╔══╝ ██║  ██║ ██╔══██╗ ████╗  ██║ ██║ ██╔╝    ╚██╗ ██╔╝ ██╔═══██╗ ██║   ██║    ██║" << endl;
-    for(int i=1;i<=(columns-76)/2;i++)
-    cout<<" ";
+    space((columns-87)/2);
     cout << "   ██║    ███████║ ███████║ ██╔██╗ ██║ █████╔╝      ╚████╔╝  ██║   ██║ ██║   ██║    ██║" << endl;
-    for(int i=1;i<=(columns-76)/2;i++)
-    cout<<" ";
+    space((columns-87)/2);
     cout << "   ██║    ██╔══██║ ██╔══██║ ██║╚██╗██║ ██╔═██╗       ╚██╔╝   ██║   ██║ ██║   ██║    ╚═╝" << endl;
-    for(int i=1;i<=(columns-76)/2;i++)
-    cout<<" ";
+    space((columns-87)/2);
     cout << "   ██║    ██║  ██║ ██║  ██║ ██║ ╚████║ ██║  ██╗       ██║    ╚██████╔╝ ╚██████╔╝    ██╗" << endl;
-    for(int i=1;i<=(columns-76)/2;i++)
-    cout<<" ";
+    space((columns-87)/2);
     cout << "   ╚═╝    ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝  ╚═══╝ ╚═╝  ╚═╝       ╚═╝     ╚═════╝   ╚═════╝     ╚═╝" << style::reset;
     }
-/*void wscreen() //calculate console size for alignment purposes
+void wscreen() //calculate console size for alignment purposes
     {
        //src: https://stackoverflow.com/questions/23369503/get-size-of-terminal-window-rows-columns
        system("chcp 65001");
@@ -673,24 +643,16 @@ void thankYou()
        columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;//calculates rows in console
        rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;//calculates columns in console
 
-    }*/
-void lscreen(int argc, char **argv) //calculate console size for alignment purposes
-    {
-    struct winsize w;
-    ioctl(fileno(stdout), TIOCGWINSZ, &w);
-    columns = (int)(w.ws_col);
-    rows = (int)(w.ws_row);
     }
-
 int main()
     {
-    lscreen();
-    //wscreen();
+
+    wscreen();
 
     clearScr();
     greet();
     string name;
-    cout << style::italic << "\nEnter Your Name" << style::reset << style::bold << " -->" << style::reset << " ";
+    cout<<"\n"<< style::italic << "Enter Your Name" << style::reset<<style::bold << " -->" << style::reset << " ";
     hideCursor();
     cin >> name;
     clearScr();
