@@ -585,7 +585,7 @@ void asktoPay(int amt)
 {
     while (true)
     {
-        cout << style::bold << rang::fgB::yellow << rang::bg::black << style::reversed << "\n Proceed to pay ₹" << amt << "? Confirm with 'yes' or 'no', Press 'q' to quit " << style::reset << endl;
+        cout << style::bold << rang::fgB::yellow << rang::bg::black << style::reversed << "\n Proceed to pay ₹" << comma(to_string(amt)) << "? Confirm with 'yes' or 'no', Press 'q' to quit " << style::reset << endl;
         int choice = userInputHandler01();
         if (choice == 1)
             break;
@@ -597,7 +597,7 @@ void asktoPay(int amt)
 void thankYou()
 {
     cout << "\n\n\n\n"
-         << rang::bgB::yellow << rang::fgB::red;
+         << rang::fgB::magenta;
     cout << "████████╗ ██╗  ██╗  █████╗  ███╗   ██╗ ██╗  ██╗    ██╗   ██╗  ██████╗  ██╗   ██╗    ██╗" << endl;
     cout << "╚══██╔══╝ ██║  ██║ ██╔══██╗ ████╗  ██║ ██║ ██╔╝    ╚██╗ ██╔╝ ██╔═══██╗ ██║   ██║    ██║" << endl;
     cout << "   ██║    ███████║ ███████║ ██╔██╗ ██║ █████╔╝      ╚████╔╝  ██║   ██║ ██║   ██║    ██║" << endl;

@@ -14,6 +14,7 @@ const int errCode = -2147483647;
 string space(int n)
 {
     string s = "";
+    n = (columns - n) / 2;
     for (int i = 1; i <= n; i++)
         s += " ";
     return s;
@@ -34,7 +35,7 @@ void showCursor() // src:https://stackoverflow.com/a/55313602
 void quit()
 {
     clearScr();
-    cout << space((columns - 50) / 2) << style::blink << ":)  " << style::reset << fg::magenta << style::bold << "Thanks for visiting us, do come back later" << style::reset << style::blink << ":) " << style::reset << endl;
+    cout << space(50) << style::blink << ":)  " << style::reset << fg::magenta << style::bold << "Thanks for visiting us, do come back later" << style::reset << style::blink << ":) " << style::reset << endl;
     showCursor();
     exit(0); // stop program with exit code = 0, i.e. program stopped without any crashes
 }
@@ -157,14 +158,14 @@ char *date() // returns current day of the week, depends on <ctime>. Returns poi
 }
 void greet()
 {
-    cout << space((columns - 67) / 2) << rang::bgB::yellow << rang::fgB::red << "                                                                               " << rang::bg::reset << rang::fg::reset << endl;
-    cout << space((columns - 67) / 2) << rang::bgB::yellow << rang::fgB::red << "  ██╗    ██╗ ███████╗ ██╗       ██████╗  ██████╗  ███╗   ███╗ ███████╗    ██╗  " << rang::bg::reset << rang::fg::reset << endl;
-    cout << space((columns - 67) / 2) << rang::bgB::yellow << rang::fgB::red << "  ██║    ██║ ██╔════╝ ██║      ██╔════╝ ██╔═══██╗ ████╗ ████║ ██╔════╝    ██║  " << rang::bg::reset << rang::fg::reset << endl;
-    cout << space((columns - 67) / 2) << rang::bgB::yellow << rang::fgB::red << "  ██║ █╗ ██║ █████╗   ██║      ██║      ██║   ██║ ██╔████╔██║ █████╗      ██║  " << rang::bg::reset << rang::fg::reset << endl;
-    cout << space((columns - 67) / 2) << rang::bgB::yellow << rang::fgB::red << "  ██║███╗██║ ██╔══╝   ██║      ██║      ██║   ██║ ██║╚██╔╝██║ ██╔══╝      ╚═╝  " << rang::bg::reset << rang::fg::reset << endl;
-    cout << space((columns - 67) / 2) << rang::bgB::yellow << rang::fgB::red << "  ╚███╔███╔╝ ███████╗ ███████╗ ╚██████╗ ╚██████╔╝ ██║ ╚═╝ ██║ ███████╗    ██╗  " << rang::bg::reset << rang::fg::reset << endl;
-    cout << space((columns - 67) / 2) << rang::bgB::yellow << rang::fgB::red << "   ╚══╝╚══╝  ╚══════╝ ╚══════╝  ╚═════╝  ╚═════╝  ╚═╝     ╚═╝ ╚══════╝    ╚═╝  " << rang::bg::reset << rang::fg::reset << endl;
-    cout << space((columns - 67) / 2) << rang::bgB::yellow << rang::fgB::red << rang::bgB::yellow << rang::fgB::red << "                                                                               \n\n"
+    cout << space(67) << rang::bgB::yellow << rang::fgB::red << "                                                                               " << rang::bg::reset << rang::fg::reset << endl;
+    cout << space(67) << rang::bgB::yellow << rang::fgB::red << "  ██╗    ██╗ ███████╗ ██╗       ██████╗  ██████╗  ███╗   ███╗ ███████╗    ██╗  " << rang::bg::reset << rang::fg::reset << endl;
+    cout << space(67) << rang::bgB::yellow << rang::fgB::red << "  ██║    ██║ ██╔════╝ ██║      ██╔════╝ ██╔═══██╗ ████╗ ████║ ██╔════╝    ██║  " << rang::bg::reset << rang::fg::reset << endl;
+    cout << space(67) << rang::bgB::yellow << rang::fgB::red << "  ██║ █╗ ██║ █████╗   ██║      ██║      ██║   ██║ ██╔████╔██║ █████╗      ██║  " << rang::bg::reset << rang::fg::reset << endl;
+    cout << space(67) << rang::bgB::yellow << rang::fgB::red << "  ██║███╗██║ ██╔══╝   ██║      ██║      ██║   ██║ ██║╚██╔╝██║ ██╔══╝      ╚═╝  " << rang::bg::reset << rang::fg::reset << endl;
+    cout << space(67) << rang::bgB::yellow << rang::fgB::red << "  ╚███╔███╔╝ ███████╗ ███████╗ ╚██████╗ ╚██████╔╝ ██║ ╚═╝ ██║ ███████╗    ██╗  " << rang::bg::reset << rang::fg::reset << endl;
+    cout << space(67) << rang::bgB::yellow << rang::fgB::red << "   ╚══╝╚══╝  ╚══════╝ ╚══════╝  ╚═════╝  ╚═════╝  ╚═╝     ╚═╝ ╚══════╝    ╚═╝  " << rang::bg::reset << rang::fg::reset << endl;
+    cout << space(67) << rang::bgB::yellow << rang::fgB::red << rang::bgB::yellow << rang::fgB::red << "                                                                               \n\n"
          << rang::bg::reset << rang::fg::reset << style::reset;
     char *today;
     today = date();
@@ -593,7 +594,7 @@ void asktoPay(int amt)
 {
     while (true)
     {
-        cout << style::bold << rang::fgB::yellow << rang::bg::black << style::reversed << "\n Proceed to pay ₹" << amt << "? Confirm with 'yes' or 'no', Press 'q' to quit " << style::reset << endl;
+        cout << style::bold << rang::fgB::yellow << rang::bg::black << style::reversed << "\n Proceed to pay ₹" << comma(to_string(amt)) << "? Confirm with 'yes' or 'no', Press 'q' to quit " << style::reset << endl;
         int choice = userInputHandler01();
         if (choice == 1)
             break;
@@ -605,7 +606,7 @@ void asktoPay(int amt)
 void thankYou()
 {
     cout << "\n\n\n\n"
-         << rang::bgB::yellow << rang::fgB::red;
+         << rang::fgB::magenta;
     cout << space((columns - 87) / 2) << "████████╗ ██╗  ██╗  █████╗  ███╗   ██╗ ██╗  ██╗    ██╗   ██╗  ██████╗  ██╗   ██╗    ██╗" << endl;
     cout << space((columns - 87) / 2) << "╚══██╔══╝ ██║  ██║ ██╔══██╗ ████╗  ██║ ██║ ██╔╝    ╚██╗ ██╔╝ ██╔═══██╗ ██║   ██║    ██║" << endl;
     cout << space((columns - 87) / 2) << "   ██║    ███████║ ███████║ ██╔██╗ ██║ █████╔╝      ╚████╔╝  ██║   ██║ ██║   ██║    ██║" << endl;
