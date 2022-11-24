@@ -14,14 +14,15 @@ const int errCode = -2147483647;
 string space(int n)
 {
     string s = "";
-    n = (columns - n) / 2;
     for (int i = 1; i <= n; i++)
         s += " ";
     return s;
 }
+void setup();
 void clearScr()
 {
     // This is an ANSI Escape Code. It tells the console to flush the screen and reset the cursor. src:https://stackoverflow.com/a/32008479
+    setup();
     cout << "\033[2J\033[1;1H";
 }
 void hideCursor() // src:https://stackoverflow.com/a/55313602
@@ -35,7 +36,7 @@ void showCursor() // src:https://stackoverflow.com/a/55313602
 void quit()
 {
     clearScr();
-    cout << space(50) << style::blink << ":)  " << style::reset << fg::magenta << style::bold << "Thanks for visiting us, do come back later" << style::reset << style::blink << ":) " << style::reset << endl;
+    cout << space((columns - 50) / 2) << style::blink << fg::magenta << style::bold<< ":)  " << style::reset << fg::magenta << style::bold << "Thanks for visiting us, do come back later" << style::reset << style::blink <<  fg::magenta << style::bold<<" :)" << style::reset << endl;
     showCursor();
     exit(0); // stop program with exit code = 0, i.e. program stopped without any crashes
 }
@@ -158,14 +159,14 @@ char *date() // returns current day of the week, depends on <ctime>. Returns poi
 }
 void greet()
 {
-    cout << space(67) << rang::bgB::yellow << rang::fgB::red << "                                                                               " << rang::bg::reset << rang::fg::reset << endl;
-    cout << space(67) << rang::bgB::yellow << rang::fgB::red << "  ██╗    ██╗ ███████╗ ██╗       ██████╗  ██████╗  ███╗   ███╗ ███████╗    ██╗  " << rang::bg::reset << rang::fg::reset << endl;
-    cout << space(67) << rang::bgB::yellow << rang::fgB::red << "  ██║    ██║ ██╔════╝ ██║      ██╔════╝ ██╔═══██╗ ████╗ ████║ ██╔════╝    ██║  " << rang::bg::reset << rang::fg::reset << endl;
-    cout << space(67) << rang::bgB::yellow << rang::fgB::red << "  ██║ █╗ ██║ █████╗   ██║      ██║      ██║   ██║ ██╔████╔██║ █████╗      ██║  " << rang::bg::reset << rang::fg::reset << endl;
-    cout << space(67) << rang::bgB::yellow << rang::fgB::red << "  ██║███╗██║ ██╔══╝   ██║      ██║      ██║   ██║ ██║╚██╔╝██║ ██╔══╝      ╚═╝  " << rang::bg::reset << rang::fg::reset << endl;
-    cout << space(67) << rang::bgB::yellow << rang::fgB::red << "  ╚███╔███╔╝ ███████╗ ███████╗ ╚██████╗ ╚██████╔╝ ██║ ╚═╝ ██║ ███████╗    ██╗  " << rang::bg::reset << rang::fg::reset << endl;
-    cout << space(67) << rang::bgB::yellow << rang::fgB::red << "   ╚══╝╚══╝  ╚══════╝ ╚══════╝  ╚═════╝  ╚═════╝  ╚═╝     ╚═╝ ╚══════╝    ╚═╝  " << rang::bg::reset << rang::fg::reset << endl;
-    cout << space(67) << rang::bgB::yellow << rang::fgB::red << rang::bgB::yellow << rang::fgB::red << "                                                                               \n\n"
+    cout << space((columns - 67) / 2) << rang::bgB::yellow << rang::fgB::red << "                                                                               " << rang::bg::reset << rang::fg::reset << endl;
+    cout << space((columns - 67) / 2) << rang::bgB::yellow << rang::fgB::red << "  ██╗    ██╗ ███████╗ ██╗       ██████╗  ██████╗  ███╗   ███╗ ███████╗    ██╗  " << rang::bg::reset << rang::fg::reset << endl;
+    cout << space((columns - 67) / 2) << rang::bgB::yellow << rang::fgB::red << "  ██║    ██║ ██╔════╝ ██║      ██╔════╝ ██╔═══██╗ ████╗ ████║ ██╔════╝    ██║  " << rang::bg::reset << rang::fg::reset << endl;
+    cout << space((columns - 67) / 2) << rang::bgB::yellow << rang::fgB::red << "  ██║ █╗ ██║ █████╗   ██║      ██║      ██║   ██║ ██╔████╔██║ █████╗      ██║  " << rang::bg::reset << rang::fg::reset << endl;
+    cout << space((columns - 67) / 2) << rang::bgB::yellow << rang::fgB::red << "  ██║███╗██║ ██╔══╝   ██║      ██║      ██║   ██║ ██║╚██╔╝██║ ██╔══╝      ╚═╝  " << rang::bg::reset << rang::fg::reset << endl;
+    cout << space((columns - 67) / 2) << rang::bgB::yellow << rang::fgB::red << "  ╚███╔███╔╝ ███████╗ ███████╗ ╚██████╗ ╚██████╔╝ ██║ ╚═╝ ██║ ███████╗    ██╗  " << rang::bg::reset << rang::fg::reset << endl;
+    cout << space((columns - 67) / 2) << rang::bgB::yellow << rang::fgB::red << "   ╚══╝╚══╝  ╚══════╝ ╚══════╝  ╚═════╝  ╚═════╝  ╚═╝     ╚═╝ ╚══════╝    ╚═╝  " << rang::bg::reset << rang::fg::reset << endl;
+    cout << space((columns - 67) / 2) << rang::bgB::yellow << rang::fgB::red << rang::bgB::yellow << rang::fgB::red << "                                                                               \n\n"
          << rang::bg::reset << rang::fg::reset << style::reset;
     char *today;
     today = date();
@@ -530,8 +531,8 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
             else
             {
                 clearScr();
-                cout << style::bold << "All Items Removed from cart" << style::reset << endl;
-                cout << style::blink << "    " << style::bold << "Thanks for visiting us, do come back later" << style::reset << endl;
+                cout << space((columns-27)/2)<<style::bold << "All Items Removed from cart" << style::reset << endl;
+                cout << space((columns - 50) / 2) << style::blink << fg::magenta << style::bold<< ":)  " << style::reset << fg::magenta << style::bold << "Thanks for visiting us, do come back later" << style::reset << style::blink <<  fg::magenta << style::bold<<" :)" << style::reset << endl;
                 showCursor();
                 exit(0);
             }
@@ -605,8 +606,7 @@ void asktoPay(int amt)
 
 void thankYou()
 {
-    cout << "\n\n\n\n"
-         << rang::fgB::magenta;
+    cout << "\n\n\n\n"<< rang::fgB::magenta;
     cout << space((columns - 87) / 2) << "████████╗ ██╗  ██╗  █████╗  ███╗   ██╗ ██╗  ██╗    ██╗   ██╗  ██████╗  ██╗   ██╗    ██╗" << endl;
     cout << space((columns - 87) / 2) << "╚══██╔══╝ ██║  ██║ ██╔══██╗ ████╗  ██║ ██║ ██╔╝    ╚██╗ ██╔╝ ██╔═══██╗ ██║   ██║    ██║" << endl;
     cout << space((columns - 87) / 2) << "   ██║    ███████║ ███████║ ██╔██╗ ██║ █████╔╝      ╚████╔╝  ██║   ██║ ██║   ██║    ██║" << endl;
@@ -625,7 +625,6 @@ void setup() // calculate console size for alignment purposes
 }
 int main()
 {
-    setup();
     clearScr();
     greet();
     cout << style::italic << "\nEnter Your Name" << style::reset << style::bold << " -->" << style::reset << " ";
