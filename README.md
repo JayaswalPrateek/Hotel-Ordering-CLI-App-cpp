@@ -9,7 +9,31 @@
 
 ## Problem Statement
 
-> **The objective of the project is to demonstrate a robust and full proof programming logic for a menu based ordering system written in c++**
+> **The objective of the project is to demonstrate a robust programming logic for a menu based ordering system written in c++**
+
+## Project Topic
+
+> **We implemented an extensible food ordering program with features that include drawing tables, adding/deleting dishes from bill with relevant error handling.**
+
+## Abstract
+
+- Handling User Input
+  - We created a single function for taking user input across the whole program.
+  - The function trims whitespaces from the input and converts the entire input into lowercase.
+- A function called stoic() converts string input to integer and returns errCode when any character of the string is not a number.
+- A function called comma() takes a string input which is always made up of numbers and adds commas in between them as per the Indian Numbering System.
+- Structs 'menu' and 'bill' store the type(veg/nonveg), name, cost and qty of the dish.
+- A function date() returns the name of the day of the week which is showed in the banner at the start of the program.
+- We create a veg menu map or a non veg menu map depending on the choice of the user. The map members can be extended and easily modified without changing any other code.
+- As per the preference of the user the relevant menu is printed in the form of a table.
+- The user can add items to a cart by entering the dish number from the table.
+  - The user cannot checkout with an empty cart.
+  - If dish already added before, we update its quantity otherwise we create a new entry in the cart.
+- The user can delete items from the cart by entering the dish number from the table.
+  - if only one item is in the cart, directly ask the quantity of dishes to be removed from the cart.
+  - inform user if the item has already has been removed by matching history.
+  - if the quantity of the dish is one, then directly remove it otherwise ask for the quantity of the dishes to be removed.
+  - exit if user removes all the items from the cart.
 
 ## Code Explained
 
@@ -109,7 +133,7 @@ int stoic(string snum)
 }
 ```
 
-- string to int converter. Similar func available in STL, but needs try-catch. Pun intended(stoicism)
+- string to int converter. Similar func available in STL, but needs try-catch. Pun intended(stoicism).
 
 ```cpp
 string comma(string s)
@@ -140,7 +164,7 @@ string comma(string s)
 }
 ```
 
-- adds commas to numbers, so "10000" becomes "10,000"
+- adds commas to numbers, so "10000" becomes "10,000".
 
 ```cpp
 struct menu
@@ -158,7 +182,7 @@ struct bill
 };
 ```
 
-- structs for menu and bill
+- structs for menu and bill.
 
 ```cpp
 char *date() // returns current day of the week, depends on <ctime>. Returns pointer to variable date which is an array of chars which is a string
@@ -211,7 +235,7 @@ map<int, menu> setMenuNonVeg()
 }
 ```
 
-- creating a map with int as key and struct menu as value
+- creating a map with int as key and struct menu as value.
 
 ```cpp
 map<int, bill> takeOrder(map<int, menu> menumap)
@@ -249,7 +273,6 @@ map<int, bill> takeOrder(map<int, menu> menumap)
             bool skipflag = false;
             map<int, bill>::iterator i;
             for (i = billmap.begin(); i != billmap.end(); i++)
-            {
                 if ((*i).second.name == menumap.at(choice).name) // if item already in bill, dont create new entry
                 {
                     if (howMany == 0)
@@ -273,7 +296,6 @@ map<int, bill> takeOrder(map<int, menu> menumap)
                     skipflag = true;
                     break;
                 }
-            }
             if (skipflag)
                 continue;
             if (howMany != 0) // create new entry if item not in bill already and howmany =/= 0
@@ -300,19 +322,20 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
 {
     clearScr();
     printBill(billmap);
-    int history[lim], appendCtr = 0;
-    int billLen = billmap.size();
+    int history[lim], appendCtr = 0, choice = 1, billLen = billmap.size();
+    bool skipLoop = false;
     cout << style::italic << style::reversed << "\nInstructions " << style::reset << endl;
     cout << "  ● Enter " << style::bold << "DISH NUMBER" << style::reset << "\tto remove the dish from the cart" << endl;
     cout << "  ● Enter " << style::bold << "DONE" << style::reset << "\t\tto save" << endl;
     cout << "  ● Press " << style::bold << "q" << style::reset << "\t\tto quit\n\n";
+    if (billLen == 1)
+        goto OnlyOneItemInBill; // when only one dish in the cart, directly ask the qty to be removed
     while (true)
     {
-        int choice = userInputHandler02(billLen);
+        choice = userInputHandler02(billLen);
         if (choice == 0)
             continue;
         if (choice == 1)
-        {
             if (billmap.size() != 0) // proceed only if all items are not removed
                 return resetKeys(billmap);
             else
@@ -323,11 +346,10 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
                 showCursor();
                 exit(0);
             }
-        }
         else
         {
             choice -= 1234;
-            bool skipLoop = false;
+            skipLoop = false;
             for (int i = 0; i < lim; i++)
                 if (history[i] == choice)
                 {
@@ -349,6 +371,7 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
             else
                 while (true)
                 {
+                OnlyOneItemInBill:
                     cout << style::italic << "There are " << billmap.at(choice).qty << "x " << billmap.at(choice).name << " in cart, how many to remove? " << style::reset << style::bold << "--> ";
                     int howMany = userInputHandler04(billmap.at(choice).qty);
                     if (howMany == 0)
@@ -393,7 +416,7 @@ map<int, bill> resetKeys(map<int, bill> billmap) // if dishes 2,3,4 are ordered 
 }
 ```
 
-- reset order of keys of maps after deletion
+- reset order of keys of maps after deletion.****
 
 ## Code
 

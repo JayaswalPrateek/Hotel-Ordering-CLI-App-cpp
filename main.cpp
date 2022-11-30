@@ -341,7 +341,6 @@ map<int, bill> takeOrder(map<int, menu> menumap)
             bool skipflag = false;
             map<int, bill>::iterator i;
             for (i = billmap.begin(); i != billmap.end(); i++)
-            {
                 if ((*i).second.name == menumap.at(choice).name) // if item already in bill, dont create new entry
                 {
                     if (howMany == 0)
@@ -365,7 +364,6 @@ map<int, bill> takeOrder(map<int, menu> menumap)
                     skipflag = true;
                     break;
                 }
-            }
             if (skipflag)
                 continue;
             if (howMany != 0) // create new entry if item not in bill already and howmany =/= 0
@@ -503,19 +501,20 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
 {
     clearScr();
     printBill(billmap);
-    int history[lim], appendCtr = 0;
-    int billLen = billmap.size();
+    int history[lim], appendCtr = 0, choice = 1, billLen = billmap.size();
+    bool skipLoop = false;
     cout << style::italic << style::reversed << "\nInstructions " << style::reset << endl;
     cout << "  ● Enter " << style::bold << "DISH NUMBER" << style::reset << "\tto remove the dish from the cart" << endl;
     cout << "  ● Enter " << style::bold << "DONE" << style::reset << "\t\tto save" << endl;
     cout << "  ● Press " << style::bold << "q" << style::reset << "\t\tto quit\n\n";
+    if (billLen == 1)
+        goto OnlyOneItemInBill; // when only one dish in the cart, directly ask the qty to be removed
     while (true)
     {
-        int choice = userInputHandler02(billLen);
+        choice = userInputHandler02(billLen);
         if (choice == 0)
             continue;
         if (choice == 1)
-        {
             if (billmap.size() != 0) // proceed only if all items are not removed
                 return resetKeys(billmap);
             else
@@ -526,11 +525,10 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
                 showCursor();
                 exit(0);
             }
-        }
         else
         {
             choice -= 1234;
-            bool skipLoop = false;
+            skipLoop = false;
             for (int i = 0; i < lim; i++)
                 if (history[i] == choice)
                 {
@@ -552,6 +550,7 @@ map<int, bill> letsDel(map<int, bill> billmap, int lim)
             else
                 while (true)
                 {
+                OnlyOneItemInBill:
                     cout << style::italic << "There are " << billmap.at(choice).qty << "x " << billmap.at(choice).name << " in cart, how many to remove? " << style::reset << style::bold << "--> ";
                     int howMany = userInputHandler04(billmap.at(choice).qty);
                     if (howMany == 0)
