@@ -416,7 +416,7 @@ map<int, bill> resetKeys(map<int, bill> billmap) // if dishes 2,3,4 are ordered 
 }
 ```
 
-- reset order of keys of maps after deletion.****
+- reset order of keys of maps after deletion.
 
 ## Code
 
