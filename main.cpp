@@ -1,3 +1,4 @@
+// try fmtin cell content w/ rang
 #include "rang.hpp" // for text coloring and formatting
 using namespace rang;
 
@@ -76,6 +77,13 @@ int stoic(string snum) // converts string to int. Similar func available in STL,
         else
             return errCode;
     return num;
+}
+string sprinter(string ch, int n)
+{
+    string ret = "";
+    for (int i = 0; i < n; i++)
+        ret += ch;
+    return ret;
 }
 string isItVeg(string checkDish)
 {
@@ -222,28 +230,27 @@ map<int, menu> decideMenu(string name)
             return setMenuNonVeg();
     }
 }
-void printMenu(map<int, menu> menumap) // CAUTION : very large dish name COULD break alignment but wont crash() :(
+void printMenu(map<int, menu> menumap)
 {
-    cout << "╔═══════════════════════════════════════╗" << endl;
-    cout << "║                                       ║" << endl;
-    cout << "║            " << style::blink << "🤤" << style::reset << style::bold << " Our Menu " << style::reset << style::blink << "🤤" << style::reset << "             ║" << endl;
-    cout << "║                                       ║" << endl;
-    cout << "║    ╔══════════════════════════╦═══════╣" << endl;
+    int srnumLen, nameLen, costLen;
+    srnumLen = nameLen = costLen = 0;
     map<int, menu>::iterator i;
-    for (i = menumap.begin(); i != menumap.end(); i++)
+    for (i = menumap.begin(); i != menumap.end(); i++) // computes max len of any element of a column and we pad it later accordingly
     {
-        if ((*i).first < 10)                    // align dish number
-            if ((*i).second.name.length() < 11) // align dish name
-                cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t\t║ ₹ " << (*i).second.cost << " ║";
-            else
-                cout << "║ " << (*i).first << "  ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t║ ₹ " << (*i).second.cost << " ║";
-        else if ((*i).second.name.length() < 11) // align dish number & name
-            cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t\t║ ₹ " << (*i).second.cost << " ║";
-        else
-            cout << "║ " << (*i).first << " ║ " << isItVeg((*i).second.type) << "  " << (*i).second.name << " \t║ ₹ " << (*i).second.cost << " ║";
-        cout << "\n";
+        srnumLen = to_string((*i).first).length() > srnumLen ? to_string((*i).first).length() : srnumLen;
+        nameLen = (*i).second.name.length() > nameLen ? (*i).second.name.length() : nameLen;
+        costLen = to_string((*i).second.cost).length() > costLen ? to_string((*i).second.cost).length() : costLen;
     }
-    cout << "╚════╩══════════════════════════╩═══════╝\n\n";
+    const int width = 1 + srnumLen + 1 + 1 + 1 + 2 + 2 + nameLen + 2 + 1 + 3 + costLen + 1;
+    const int bannerPad = (width - 14) % 2 == 0 ? (width - 14) : (width - 13);
+    cout << "╔" << sprinter("═", width) << "╗" << endl;
+    cout << "║" << sprinter(" ", width) << "║" << endl;
+    cout << "║" << sprinter(" ", bannerPad / 2) << style::blink << "🤤" << style::reset << style::bold << " Our Menu " << style::reset << style::blink << "🤤" << style::reset << sprinter(" ", (width - 14) / 2) << "║" << endl;
+    cout << "║" << sprinter(" ", width) << "║" << endl;
+    cout << "║" << sprinter(" ", srnumLen + 2) << "╔" << sprinter("═", nameLen + 7) << "╦" << sprinter("═", costLen + 4) << "╣" << endl;
+    for (i = menumap.begin(); i != menumap.end(); i++)
+        cout << "║ " << style::bold << (*i).first << style::reset << sprinter(" ", (1 + srnumLen - to_string((*i).first).length())) << "║ " << isItVeg((*i).second.type) << "  " << style::italic << (*i).second.name << style::reset << sprinter(" ", (2 + nameLen - (*i).second.name.length())) << "║ ₹ " << (*i).second.cost << sprinter(" ", (1 + costLen - to_string((*i).second.cost).length())) << "║" << endl;
+    cout << "╚" << sprinter("═", srnumLen + 2) << "╩" << sprinter("═", nameLen + 7) << "╩" << sprinter("═", costLen + 4) << "╝\n\n";
 }
 
 void wannaBuy(string name)
@@ -381,74 +388,38 @@ map<int, bill> takeOrder(map<int, menu> menumap)
 
 int printBill(map<int, bill> billmap)
 {
-    int total;
+    int srnumLen, nameLen, rateLen, qLen, amtLen, total;
+    srnumLen = nameLen = rateLen = qLen = amtLen = total = 0;
     map<int, bill>::iterator i;
-    cout << "╔═══════════════════════════════════════════════════════╗" << endl;
-    cout << "║                                                       ║" << endl;
-    cout << "║                    " << style::blink << "🧂" << style::reset << style::bold << " Your Bill " << style::reset << style::blink << "💰" << style::reset << "                    ║" << endl;
-    cout << "║                                                       ║" << endl;
-    cout << "║    ╔═══════════════════════════╦═══════╦═════╦════════╣" << endl;
-    cout << "║    ║ " << style::bold << "Dish Name" << style::reset << "                 ║ " << style::bold << "Rate" << style::reset << "  ║ " << style::bold << "Qty" << style::reset << " ║ " << style::bold << "Amt(₹)" << style::reset << " ║" << endl;
-    cout << "║    ╠═══════════════════════════╬═══════╬═════╬════════╣" << endl;
-
-    // incrementally creating rows as strings by measuring lengths of cells and padding them accordingly
-    string print, tab = "\t", sep = "║", ws = " ";
+    for (i = billmap.begin(); i != billmap.end(); i++) // computes max len of any element of a column and we pad it later accordingly
+    {
+        srnumLen = to_string((*i).first).length() > srnumLen ? to_string((*i).first).length() : srnumLen;
+        nameLen = (*i).second.name.length() > nameLen ? (*i).second.name.length() : nameLen;
+        rateLen = to_string((*i).second.cost / (*i).second.qty).length() > rateLen ? to_string((*i).second.cost / (*i).second.qty).length() : rateLen;
+        qLen = to_string((*i).second.qty).length() > qLen ? to_string((*i).second.qty).length() : qLen;
+        amtLen = comma(to_string((*i).second.cost)).length() > amtLen ? comma(to_string((*i).second.cost)).length() : amtLen;
+    }
+    nameLen = nameLen < 4 ? 5 : nameLen;
+    rateLen = rateLen < 4 ? 4 : rateLen;
+    qLen = qLen > 1 ? qLen - 1 : qLen;
+    amtLen = amtLen < 4 ? 5 : amtLen;
+    const int width = 1 + srnumLen + 1 + 1 + 2 + 2 + nameLen + 2 + 4 + rateLen + 4 + qLen + 4 + amtLen + 1;
+    const int bannerPad = (width - 15) % 2 != 0 ? (width - 15) : (width - 14);
+    cout << "╔" << sprinter("═", width) << "╗" << endl;
+    cout << "║" << sprinter(" ", width) << "║" << endl;
+    cout << "║" << sprinter(" ", bannerPad / 2) << style::blink << "🧂" << style::reset << style::bold << " Your Bill " << style::reset << style::blink << "💰" << style::reset << sprinter(" ", (width - 14) / 2) << "║" << endl;
+    cout << "║" << sprinter(" ", width) << "║" << endl;
+    cout << "║" << sprinter(" ", srnumLen + 2) << "╔" << sprinter("═", nameLen + 7) << "╦" << sprinter("═", rateLen + 3) << "╦" << sprinter("═", qLen + 4) << "╦" << sprinter("═", amtLen + 2) << "╣" << endl;
+    cout << "║" << sprinter(" ", srnumLen + 2) << "║" << style::bold << " Dish Name" << style::reset << sprinter(" ", nameLen - 3) << "║" << style::bold << " Rate" << style::reset << sprinter(" ", rateLen - 2) << "║" << style::bold << " Qty " << style::reset << sprinter(" ", qLen - 1) << "║" << style::bold << " ₹ Amt" << style::reset << sprinter(" ", 1 + amtLen - 5) << "║" << endl;
+    cout << "║" << sprinter(" ", srnumLen + 2) << "╠" << sprinter("═", nameLen + 7) << "╬" << sprinter("═", rateLen + 3) << "╬" << sprinter("═", qLen + 4) << "╬" << sprinter("═", amtLen + 2) << "╣" << endl;
     for (i = billmap.begin(); i != billmap.end(); i++)
     {
-        // aligning dish numbers
-        if ((*i).first < 10)
-            print = sep + ws + to_string((*i).first) + ws + ws + sep + ws + isItVeg((*i).second.type) + ws + (*i).second.name + tab;
-        else if ((*i).first >= 10)
-            print = sep + ws + to_string((*i).first) + ws + sep + ws + isItVeg((*i).second.type) + ws + (*i).second.name + tab;
-
-        // aligning dish names
-        if ((*i).second.name.length() < 5)
-            print += tab + tab + ws + sep + ws;
-        else if ((*i).second.name.length() <= 13 && (*i).second.name.length() > 5)
-            print += tab + ws + sep + ws;
-        else if ((*i).second.name.length() > 13)
-            print += ws + sep + ws;
-        else
-            print += tab + tab + ws + sep + ws;
-
-        // aligning rate
-        print += to_string((*i).second.cost / (*i).second.qty) + ws + ws + ws + sep + ws;
-
-        print += "x" + to_string((*i).second.qty);
-
-        // aligning dish qty
-        if ((*i).second.qty < 10)
-            print += ws + ws + sep;
-        else if ((*i).second.qty < 100)
-            print += ws + sep;
-
-        // aligning dish qty * dish price
-        if ((*i).second.cost < 1000)
-            print += ws + ws + ws + ws + comma(to_string((*i).second.cost)) + ws + sep;
-        else if ((*i).second.cost < 10000)
-            print += ws + ws + comma(to_string((*i).second.cost)) + ws + sep;
-        else if ((*i).second.cost < 100000)
-            print += ws + comma(to_string((*i).second.cost)) + ws + sep;
-
-        cout << print << endl;     // print row by row
-        total += (*i).second.cost; // calc total cost while printing
+        cout << "║ " << style::bold << (*i).first << style::reset << sprinter(" ", (1 + srnumLen - to_string((*i).first).length())) << "║ " << isItVeg((*i).second.type) << "  " << style::italic << (*i).second.name << style::reset << sprinter(" ", (2 + nameLen - (*i).second.name.length())) << "║ ₹ " << (*i).second.cost / (*i).second.qty << sprinter(" ", (rateLen - to_string((*i).second.cost / (*i).second.qty).length())) << "║ x" << (*i).second.qty << sprinter(" ", 1 + qLen - to_string((*i).second.qty).length()) << " ║" << sprinter(" ", (1 + amtLen - comma(to_string((*i).second.cost)).length())) << comma(to_string((*i).second.cost)) << " ║" << endl;
+        total += (*i).second.cost;
     }
-
-    // formatting last row
-    string pad;
-    if (total > 99 && total < 1000)
-        pad = "                ";
-    else if (total > 999 && total < 10000)
-        pad = "              ";
-    else if (total > 9999 && total < 100000)
-        pad = "             ";
-    else if (total > 99999 && total < 1000000)
-        pad = "           ";
-    else if (total > 99999 && total < 1000000)
-        pad = "         ";
-    cout << "╠════╩═══════════════════════════╩═══════╩═════╩════════╣" << endl;
-    cout << "║    " << style::bold << rang::bg::black << rang::fgB::yellow << style::reversed << " Total Cost: ₹ " << comma(to_string(total)) << "/- (incl. taxes) " << style::reset << pad << "║" << endl;
-    cout << "╚═══════════════════════════════════════════════════════╝" << endl;
+    cout << "║" << sprinter(" ", srnumLen + 2) << "╚" << sprinter("═", nameLen + 7) << "╩" << sprinter("═", rateLen + 3) << "╩" << sprinter("═", qLen + 4) << "╩" << sprinter("═", amtLen + 2) << "╣" << endl;
+    cout << "║" << sprinter(" ", srnumLen + 2) << style::bold << rang::bg::black << rang::fgB::yellow << style::reversed << " Total Cost: ₹ " << comma(to_string(total)) << "/- " << style::reset << sprinter(" ", width - srnumLen - 20 - comma(to_string(total)).length()) << "║" << endl;
+    cout << "╚" << sprinter("═", width) << "╝\n";
     return total;
 }
 
