@@ -1,4 +1,6 @@
-// try fmtin cell content w/ rang
+// Todo:
+// printBill() needs more testing and refactoring
+// update docs w/ new code
 #include "rang.hpp" // for text coloring and formatting
 using namespace rang;
 
