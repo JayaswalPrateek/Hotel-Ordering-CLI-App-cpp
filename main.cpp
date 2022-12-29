@@ -1,6 +1,3 @@
-// Todo:
-// printBill() needs more testing and refactoring
-// update docs w/ new code
 #include "rang.hpp" // for text coloring and formatting
 using namespace rang;
 
@@ -33,7 +30,7 @@ void quit()
     showCursor();
     exit(0); // stop program with exit code = 0, i.e. program stopped without any crashes
 }
-void crash(string loc) // for debugging crashes and locating the function which caused unexpected behaviour
+void crash(const string &loc) // for debugging crashes and locating the function which caused unexpected behaviour
 {
     cout << style::bold << rang::fg::red << style::reversed << "The program encountered unexpected behaviour at " << loc << style::reset << "\n\n";
     exit(404);
@@ -62,7 +59,7 @@ string fetchVar() // function for normalizing all inputs
 }
 string lowerCaser(string str) // returns string in lower case
 {
-    for (int i = 0; i < str.length(); i++)
+    for (unsigned long i = 0; i < str.length(); i++)
         str[i] = tolower(str[i]);
     return str;
 }
@@ -80,14 +77,14 @@ int stoic(string snum) // converts string to int. Similar func available in STL,
             return errCode;
     return num;
 }
-string sprinter(string ch, int n)
+string sprinter(const string &ch, int n)
 {
     string ret = "";
     for (int i = 0; i < n; i++)
         ret += ch;
     return ret;
 }
-string isItVeg(string checkDish)
+string isItVeg(const string &checkDish)
 {
     if (checkDish == "veg")
         return "🟢";
@@ -220,7 +217,7 @@ map<int, menu> setMenuNonVeg()
     nonVegMenu[vegLen + 5] = {"nonveg", "Chicken Curry", 350};
     return nonVegMenu; // src:https://stackoverflow.com/a/50146252
 }
-map<int, menu> decideMenu(string name)
+map<int, menu> decideMenu(const string &name)
 {
     while (true)
     {
@@ -237,7 +234,7 @@ void printMenu(map<int, menu> menumap)
     int srnumLen, nameLen, costLen;
     srnumLen = nameLen = costLen = 0;
     map<int, menu>::iterator i;
-    for (i = menumap.begin(); i != menumap.end(); i++) // computes max len of any element of a column and we pad it later accordingly
+    for (i = menumap.begin(); i != menumap.end(); ++i) // computes max len of any element of a column and we pad it later accordingly
     {
         srnumLen = to_string((*i).first).length() > srnumLen ? to_string((*i).first).length() : srnumLen;
         nameLen = (*i).second.name.length() > nameLen ? (*i).second.name.length() : nameLen;
@@ -250,12 +247,12 @@ void printMenu(map<int, menu> menumap)
     cout << "║" << sprinter(" ", bannerPad / 2) << style::blink << "🤤" << style::reset << style::bold << " Our Menu " << style::reset << style::blink << "🤤" << style::reset << sprinter(" ", (width - 14) / 2) << "║" << endl;
     cout << "║" << sprinter(" ", width) << "║" << endl;
     cout << "║" << sprinter(" ", srnumLen + 2) << "╔" << sprinter("═", nameLen + 7) << "╦" << sprinter("═", costLen + 4) << "╣" << endl;
-    for (i = menumap.begin(); i != menumap.end(); i++)
+    for (i = menumap.begin(); i != menumap.end(); ++i)
         cout << "║ " << style::bold << (*i).first << style::reset << sprinter(" ", (1 + srnumLen - to_string((*i).first).length())) << "║ " << isItVeg((*i).second.type) << "  " << style::italic << (*i).second.name << style::reset << sprinter(" ", (2 + nameLen - (*i).second.name.length())) << "║ ₹ " << (*i).second.cost << sprinter(" ", (1 + costLen - to_string((*i).second.cost).length())) << "║" << endl;
     cout << "╚" << sprinter("═", srnumLen + 2) << "╩" << sprinter("═", nameLen + 7) << "╩" << sprinter("═", costLen + 4) << "╝\n\n";
 }
 
-void wannaBuy(string name)
+void wannaBuy(const string &name)
 {
     while (true)
     {
@@ -349,7 +346,7 @@ map<int, bill> takeOrder(map<int, menu> menumap)
             }
             bool skipflag = false;
             map<int, bill>::iterator i;
-            for (i = billmap.begin(); i != billmap.end(); i++)
+            for (i = billmap.begin(); i != billmap.end(); ++i)
                 if ((*i).second.name == menumap.at(choice).name) // if item already in bill, dont create new entry
                 {
                     if (howMany == 0)
@@ -393,7 +390,7 @@ int printBill(map<int, bill> billmap)
     int srnumLen, nameLen, rateLen, qLen, amtLen, total;
     srnumLen = nameLen = rateLen = qLen = amtLen = total = 0;
     map<int, bill>::iterator i;
-    for (i = billmap.begin(); i != billmap.end(); i++) // computes max len of any element of a column and we pad it later accordingly
+    for (i = billmap.begin(); i != billmap.end(); ++i) // computes max len of any element of a column and we pad it later accordingly
     {
         srnumLen = to_string((*i).first).length() > srnumLen ? to_string((*i).first).length() : srnumLen;
         nameLen = (*i).second.name.length() > nameLen ? (*i).second.name.length() : nameLen;
@@ -414,7 +411,7 @@ int printBill(map<int, bill> billmap)
     cout << "║" << sprinter(" ", srnumLen + 2) << "╔" << sprinter("═", nameLen + 7) << "╦" << sprinter("═", rateLen + 3) << "╦" << sprinter("═", qLen + 4) << "╦" << sprinter("═", amtLen + 2) << "╣" << endl;
     cout << "║" << sprinter(" ", srnumLen + 2) << "║" << style::bold << " Dish Name" << style::reset << sprinter(" ", nameLen - 3) << "║" << style::bold << " Rate" << style::reset << sprinter(" ", rateLen - 2) << "║" << style::bold << " Qty " << style::reset << sprinter(" ", qLen - 1) << "║" << style::bold << " ₹ Amt" << style::reset << sprinter(" ", 1 + amtLen - 5) << "║" << endl;
     cout << "║" << sprinter(" ", srnumLen + 2) << "╠" << sprinter("═", nameLen + 7) << "╬" << sprinter("═", rateLen + 3) << "╬" << sprinter("═", qLen + 4) << "╬" << sprinter("═", amtLen + 2) << "╣" << endl;
-    for (i = billmap.begin(); i != billmap.end(); i++)
+    for (i = billmap.begin(); i != billmap.end(); ++i)
     {
         cout << "║ " << style::bold << (*i).first << style::reset << sprinter(" ", (1 + srnumLen - to_string((*i).first).length())) << "║ " << isItVeg((*i).second.type) << "  " << style::italic << (*i).second.name << style::reset << sprinter(" ", (2 + nameLen - (*i).second.name.length())) << "║ ₹ " << (*i).second.cost / (*i).second.qty << sprinter(" ", (rateLen - to_string((*i).second.cost / (*i).second.qty).length())) << "║ x" << (*i).second.qty << sprinter(" ", 1 + qLen - to_string((*i).second.qty).length()) << " ║" << sprinter(" ", (1 + amtLen - comma(to_string((*i).second.cost)).length())) << comma(to_string((*i).second.cost)) << " ║" << endl;
         total += (*i).second.cost;
@@ -426,7 +423,7 @@ int printBill(map<int, bill> billmap)
 }
 
 map<int, bill> letsDel(map<int, bill> billmap, int lim);
-map<int, bill> wannaDel(map<int, bill> billmap, int lim, string name)
+map<int, bill> wannaDel(map<int, bill> billmap, int lim, const string &name)
 {
     while (true)
     {
@@ -466,7 +463,7 @@ map<int, bill> resetKeys(map<int, bill> billmap) // if dishes 2,3,4 are ordered 
     map<int, bill> newbillmap;
     map<int, bill>::iterator i;
     int assign = 1;
-    for (i = billmap.begin(); i != billmap.end(); i++, assign++)
+    for (i = billmap.begin(); i != billmap.end(); ++i, ++assign)
         newbillmap[assign] = {(*i).second.type, (*i).second.name, (*i).second.cost, (*i).second.qty};
     return newbillmap;
 }
@@ -594,11 +591,10 @@ int main()
     printMenu(menumap);
     map<int, bill> billmap = takeOrder(menumap);
     clearScr();
-    int total = printBill(billmap);
+    printBill(billmap);
     billmap = wannaDel(billmap, menumap.size(), name);
     clearScr();
-    total = printBill(billmap);
-    asktoPay(total);
+    asktoPay(printBill(billmap));
     clearScr();
     printBill(billmap);
     thankYou();
